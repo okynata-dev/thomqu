@@ -27,12 +27,19 @@ const p=new URLSearchParams(location.search);
 const N=Math.max(1,Math.min(99,parseInt(p.get('n')||'1',10)||1));
 const LONG=Math.max(1200,Math.min(4096,parseInt(p.get('res')||'3200',10)||3200));   // long side; ?res=3840 = UHD
 let TEMP=Math.max(0,Math.min(1,parseFloat(p.get('t')||'0.5')||0.5));                // NVDA temperature; 0.5 = clean print
+const SER=(p.get('s')||'huang').replace(/[^a-z]/g,'');                              // серия: huang | saylor | vitalik
 const H=LONG, Wt=Math.round(H*0.75);
-const go=n=>location.href='token.html?n='+((n+98)%99+1)+'&res='+LONG+'&t='+TEMP.toFixed(3); // wrap 1..99
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+const go=n=>location.href='token.html?n='+((n+98)%99+1)+'&res='+LONG+'&t='+TEMP.toFixed(3)+'&s='+SER; // wrap 1..99
 
-const img=new Image();
-img.onload=()=>{ENGINE.init(Wt,H);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');setTimeout(render,30);};
-img.src=window.MASTER_SRC;
+(async()=>{
+  let masters=[window.MASTER_SRC];
+  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
+    if(m.masters&&m.masters.length)masters=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
+  const img=new Image();
+  img.onload=()=>{ENGINE.init(Wt,H);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');setTimeout(render,30);};
+  img.src=masters[hashStr('master-'+SER+'-'+(N-1))%masters.length];                 // фото токена — по seed'у
+})();
 
 const regime=t=>t>0.62?['OVERHEATED','hot']:t<0.38?['BURNOUT','cold']:['CLEAN','neutral'];
 
@@ -43,14 +50,14 @@ function render(){
   const wrap=document.getElementById('wrap');wrap.innerHTML='';wrap.appendChild(cv);
   const cap=document.getElementById('cap');
   const[rg,cls]=regime(TEMP);
-  cap.innerHTML='<a href="#" id="pv">‹</a> #'+N+'/99 · '+Wt+'×'+H+' <a href="#" id="nx">›</a> · <a href="#" id="sv">save</a> · <a href="anim.html?n='+N+'&t='+TEMP.toFixed(3)+'">▶ anim</a>'
+  cap.innerHTML='<a href="#" id="pv">‹</a> #'+N+'/99 · '+Wt+'×'+H+' <a href="#" id="nx">›</a> · <a href="#" id="sv">save</a> · <a href="anim.html?n='+N+'&t='+TEMP.toFixed(3)+'&s='+SER+'">▶ anim</a>'
     +' · t <input id="tr" type="range" min="0" max="1" step="0.01" value="'+TEMP+'"> <b id="tv" class="'+cls+'">'+TEMP.toFixed(2)+' '+rg+'</b>';
   document.getElementById('pv').onclick=e=>{e.preventDefault();go(N-2);};
   document.getElementById('nx').onclick=e=>{e.preventDefault();go(N);};
   document.getElementById('sv').onclick=e=>{e.preventDefault();cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='huang_'+String(N).padStart(3,'0')+'_t'+TEMP.toFixed(2)+'_'+Wt+'x'+H+'.png';a.click();},'image/png');};
   const tr=document.getElementById('tr'),tv=document.getElementById('tv');
   tr.oninput=()=>{const t=+tr.value,[r2,c2]=regime(t);tv.textContent=t.toFixed(2)+' '+r2;tv.className=c2;};       // live label while dragging
-  tr.onchange=()=>{TEMP=+tr.value;history.replaceState(null,'','token.html?n='+N+'&res='+LONG+'&t='+TEMP.toFixed(3));ENGINE.setTemp(TEMP);render();}; // heavy re-render on release
+  tr.onchange=()=>{TEMP=+tr.value;history.replaceState(null,'','token.html?n='+N+'&res='+LONG+'&t='+TEMP.toFixed(3)+'&s='+SER);ENGINE.setTemp(TEMP);render();}; // heavy re-render on release
 }
 addEventListener('keydown',e=>{if(e.key==='ArrowLeft')go(N-2);else if(e.key==='ArrowRight')go(N);else if(e.key==='s'){const cv=document.querySelector('#wrap canvas');if(cv)cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='huang_'+String(N).padStart(3,'0')+'.png';a.click();});}});
 </script>

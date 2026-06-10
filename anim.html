@@ -27,15 +27,19 @@ const LONG=Math.max(600,Math.min(4096,parseInt(p.get('res')||'1200',10)||1200));
 const TEMP=Math.max(0,Math.min(1,parseFloat(p.get('t')||'0.5')||0.5));
 const FPS=Math.max(4,Math.min(300,parseInt(p.get('fps')||'300',10)||300));
 const MULT=Math.max(1,Math.round(FPS/60)),TICK=Math.round(1000/Math.min(FPS,60));
+const SER=(p.get('s')||'huang').replace(/[^a-z]/g,'');
 const H=LONG,Wt=Math.round(H*0.75);
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 
-let playing=true,TEXIMGS=[];
-// необязательные реальные фото: положи tex-chips.jpg / tex-city.jpg рядом — будут семплироваться они
-function loadTex(srcs){return Promise.all(srcs.map(s=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=s;}))).then(a=>a.filter(Boolean));}
-const img=new Image();
-img.onload=()=>{ENGINE.init(Wt,H);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');
-  loadTex(['tex-chips.jpg','tex-city.jpg']).then(t=>{TEXIMGS=t;setTimeout(start,30);});};
-img.src=window.MASTER_SRC;
+let playing=true;
+(async()=>{
+  let masters=[window.MASTER_SRC];
+  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
+    if(m.masters&&m.masters.length)masters=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
+  const img=new Image();
+  img.onload=()=>{ENGINE.init(Wt,H);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');setTimeout(start,30);};
+  img.src=masters[hashStr('master-'+SER+'-'+(N-1))%masters.length];
+})();
 
 function start(){
   const frames=ENGINE.animFrames(N-1,7);
@@ -44,13 +48,13 @@ function start(){
   document.getElementById('wrap').appendChild(cv);
   cv.onclick=()=>playing=!playing;
 
-  const player=GLITCH.build(N,cvs,cv.getContext('2d'),TEXIMGS);
+  const player=GLITCH.build(SER+'-'+N,cvs,cv.getContext('2d'));
 
   document.getElementById('cap').innerHTML=
     '#'+N+'/99 · live glitch · '+player.style+' · '+player.staticPct+'% static · '+FPS+'fps · t '+TEMP.toFixed(2)
-    +' · <a href="token.html?n='+N+'&t='+TEMP.toFixed(3)+'">still</a>'
-    +' · <a href="anim.html?n='+((N%99)+1)+'&t='+TEMP.toFixed(3)+'&fps='+FPS+'">next ›</a>'
-    +' · <a href="anim10.html?t='+TEMP.toFixed(3)+'">×10</a>'
+    +' · <a href="token.html?n='+N+'&t='+TEMP.toFixed(3)+'&s='+SER+'">still</a>'
+    +' · <a href="anim.html?n='+((N%99)+1)+'&t='+TEMP.toFixed(3)+'&fps='+FPS+'&s='+SER+'">next ›</a>'
+    +' · <a href="anim10.html?t='+TEMP.toFixed(3)+'&s='+SER+'">×10</a>'
     +' · click = pause';
 
   setInterval(()=>{if(playing)player.step(MULT);},TICK);

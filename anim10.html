@@ -23,35 +23,43 @@ const p=new URLSearchParams(location.search);
 const TEMP=Math.max(0,Math.min(1,parseFloat(p.get('t')||'0.5')||0.5));
 const FPS=Math.max(4,Math.min(300,parseInt(p.get('fps')||'300',10)||300));
 const MULT=Math.max(1,Math.round(FPS/60)),TICK=Math.round(1000/Math.min(FPS,60));
+const SER=(p.get('s')||'huang').replace(/[^a-z]/g,'');
 const PICKS=[3,8,14,27,33,42,57,66,78,95];          // 10 примеров вразброс по коллекции
 const RW=480,RH=640;                                 // рабочее разрешение тайла
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 
-const players=[];let TEXIMGS=[];
-function loadTex(srcs){return Promise.all(srcs.map(s=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=s;}))).then(a=>a.filter(Boolean));}
-const img=new Image();
-img.onload=()=>{ENGINE.init(RW,RH);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');
+const players=[];
+let MASTERS=[window.MASTER_SRC];
+const ICACHE={};
+const midx=i=>hashStr('master-'+SER+'-'+i)%MASTERS.length;
+const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=MASTERS[mi];}));
+
+(async()=>{
+  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
+    if(m.masters&&m.masters.length)MASTERS=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
+  ENGINE.init(RW,RH);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');
   const grid=document.getElementById('grid');
   let k=0;
-  loadTex(['tex-chips.jpg','tex-city.jpg']).then(t=>{TEXIMGS=t;next();});
+  next();
   function next(){                                   // строим по одному, чтобы страница оживала постепенно
     if(k>=PICKS.length)return;
     const n=PICKS[k++];
     const cell=document.createElement('div');cell.className='cell';
     const cv=document.createElement('canvas');cv.width=RW;cv.height=RH;
-    cv.onclick=()=>window.open('anim.html?n='+n+'&t='+TEMP.toFixed(3),'_blank');
+    cv.onclick=()=>window.open('anim.html?n='+n+'&t='+TEMP.toFixed(3)+'&s='+SER,'_blank');
     const lab=document.createElement('span');
     cell.appendChild(cv);cell.appendChild(lab);grid.appendChild(cell);
-    setTimeout(()=>{
-      const frames=ENGINE.animFrames(n-1,6);
-      const cvs=frames.map(f=>{const c=document.createElement('canvas');c.width=RW;c.height=RH;c.getContext('2d').putImageData(f,0,0);return c;});
-      const pl=GLITCH.build(n,cvs,cv.getContext('2d'),TEXIMGS);
-      lab.textContent='#'+n+' · '+pl.style+' · '+pl.staticPct+'%';
-      players.push(pl);
+    getImg(midx(n-1)).then(im=>setTimeout(()=>{
+      if(im){ENGINE.fitMaster(im);
+        const frames=ENGINE.animFrames(n-1,6);
+        const cvs=frames.map(f=>{const c=document.createElement('canvas');c.width=RW;c.height=RH;c.getContext('2d').putImageData(f,0,0);return c;});
+        const pl=GLITCH.build(SER+'-'+n,cvs,cv.getContext('2d'));
+        lab.textContent='#'+n+' · '+pl.style+' · '+pl.staticPct+'%';
+        players.push(pl);}
       next();
-    },30);
+    },30));
   }
-};
-img.src=window.MASTER_SRC;
+})();
 
 setInterval(()=>{for(const pl of players)pl.step(MULT);},TICK);
 </script>
