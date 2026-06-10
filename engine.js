@@ -132,10 +132,25 @@ function pickRegion(rng,fullProb){
   if(t<0.85){const k=Math.floor(rng()*3),th=(H/3)|0;return[0,k*th,W,(k+1)*th];}
   const w=Math.floor((0.25+rng()*0.5)*W),h=Math.floor((0.25+rng()*0.5)*H),x=Math.floor(rng()*(W-w)),y=Math.floor(rng()*(H-h));return[x,y,x+w,y+h];
 }
+// Курация 2026-06-10: токены с «кашей» (растры-призраки на средних альфах, глобальные сорты/XOR >0.5)
+// получили новые seed'ы с чистым профилем. Удачные (#12, #31, #36 и все score<1.2) не тронуты.
+const SEEDFIX={0:'huang-gen-0~5',1:'huang-gen-1~5',3:'huang-gen-3~13',4:'huang-gen-4~18',5:'huang-gen-5~1',
+ 6:'huang-gen-6~6',7:'huang-gen-7~3',9:'huang-gen-9~1',10:'huang-gen-10~7',12:'huang-gen-12~3',
+ 13:'huang-gen-13~12',14:'huang-gen-14~2',15:'huang-gen-15~16',16:'huang-gen-16~6',17:'huang-gen-17~5',
+ 18:'huang-gen-18~12',20:'huang-gen-20~8',25:'huang-gen-25~9',29:'huang-gen-29~1',31:'huang-gen-31~3',
+ 32:'huang-gen-32~1',34:'huang-gen-34~6',36:'huang-gen-36~1',39:'huang-gen-39~3',42:'huang-gen-42~14',
+ 43:'huang-gen-43~3',44:'huang-gen-44~1',45:'huang-gen-45~1',46:'huang-gen-46~12',47:'huang-gen-47~15',
+ 48:'huang-gen-48~17',49:'huang-gen-49~2',50:'huang-gen-50~13',51:'huang-gen-51~2',52:'huang-gen-52~2',
+ 54:'huang-gen-54~2',55:'huang-gen-55~2',59:'huang-gen-59~6',60:'huang-gen-60~5',61:'huang-gen-61~3',
+ 62:'huang-gen-62~5',64:'huang-gen-64~17',66:'huang-gen-66~15',67:'huang-gen-67~14',68:'huang-gen-68~10',
+ 69:'huang-gen-69~7',72:'huang-gen-72~3',73:'huang-gen-73~6',77:'huang-gen-77~1',78:'huang-gen-78~3',
+ 79:'huang-gen-79~12',80:'huang-gen-80~5',81:'huang-gen-81~26',82:'huang-gen-82~1',83:'huang-gen-83~16',
+ 85:'huang-gen-85~1',86:'huang-gen-86~1',89:'huang-gen-89~10',91:'huang-gen-91~4',92:'huang-gen-92~17',
+ 93:'huang-gen-93~5',96:'huang-gen-96~10',98:'huang-gen-98~1'};
 function compose(i){
   CUR=i;
   buildChannels(i);                                  // press collage + temp grade are per-token, pre-effects
-  const rng=mulberry32(hashStr('huang-gen-'+i));     // geometry seed stream untouched — layouts stay as curated
+  const rng=mulberry32(hashStr(SEEDFIX[i]||('huang-gen-'+i)));   // geometry seed (с кураторскими заменами)
   const base=Math.floor(rng()*FINISH.length);
   const work=new Uint8ClampedArray(finishData(base));
   let n=1+Math.floor(rng()*5); if(rng()<0.15)n+=2;
