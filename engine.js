@@ -9,6 +9,7 @@ let PCV,PCTX,KCV,KCTX,CCV,CCTX; // scratch: press-collage ink / knockout (выв
 let PRESS=true;               // press collage on/off
 let T=0.5,HEAT=0,BURN=0;      // NVDA temperature: t=0.5 clean print (grade is identity), >0.5 heat, <0.5 burnout
 let CUR=0;                    // current token index (seeds heat jitter per token)
+let COUNT=500;                // размер серии (для выходных данных No. i/COUNT)
 
 const clamp=v=>v<0?0:v>255?255:v|0;
 function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
@@ -132,25 +133,56 @@ function pickRegion(rng,fullProb){
   if(t<0.85){const k=Math.floor(rng()*3),th=(H/3)|0;return[0,k*th,W,(k+1)*th];}
   const w=Math.floor((0.25+rng()*0.5)*W),h=Math.floor((0.25+rng()*0.5)*H),x=Math.floor(rng()*(W-w)),y=Math.floor(rng()*(H-h));return[x,y,x+w,y+h];
 }
-// Курация 2026-06-10: токены с «кашей» (растры-призраки на средних альфах, глобальные сорты/XOR >0.5)
-// получили новые seed'ы с чистым профилем. Удачные (#12, #31, #36 и все score<1.2) не тронуты.
-const SEEDFIX={0:'huang-gen-0~5',1:'huang-gen-1~5',3:'huang-gen-3~13',4:'huang-gen-4~18',5:'huang-gen-5~1',
- 6:'huang-gen-6~6',7:'huang-gen-7~3',9:'huang-gen-9~1',10:'huang-gen-10~7',12:'huang-gen-12~3',
- 13:'huang-gen-13~12',14:'huang-gen-14~2',15:'huang-gen-15~16',16:'huang-gen-16~6',17:'huang-gen-17~5',
- 18:'huang-gen-18~12',20:'huang-gen-20~8',25:'huang-gen-25~9',29:'huang-gen-29~1',31:'huang-gen-31~3',
- 32:'huang-gen-32~1',34:'huang-gen-34~6',36:'huang-gen-36~1',39:'huang-gen-39~3',42:'huang-gen-42~14',
- 43:'huang-gen-43~3',44:'huang-gen-44~1',45:'huang-gen-45~1',46:'huang-gen-46~12',47:'huang-gen-47~15',
- 48:'huang-gen-48~17',49:'huang-gen-49~2',50:'huang-gen-50~13',51:'huang-gen-51~2',52:'huang-gen-52~2',
- 54:'huang-gen-54~2',55:'huang-gen-55~2',59:'huang-gen-59~6',60:'huang-gen-60~5',61:'huang-gen-61~3',
- 62:'huang-gen-62~5',64:'huang-gen-64~17',66:'huang-gen-66~15',67:'huang-gen-67~14',68:'huang-gen-68~10',
- 69:'huang-gen-69~7',72:'huang-gen-72~3',73:'huang-gen-73~6',77:'huang-gen-77~1',78:'huang-gen-78~3',
- 79:'huang-gen-79~12',80:'huang-gen-80~5',81:'huang-gen-81~26',82:'huang-gen-82~1',83:'huang-gen-83~16',
- 85:'huang-gen-85~1',86:'huang-gen-86~1',89:'huang-gen-89~10',91:'huang-gen-91~4',92:'huang-gen-92~17',
- 93:'huang-gen-93~5',96:'huang-gen-96~10',98:'huang-gen-98~1'};
+// ---- автокурация seed'ов (рантайм-версия кураторского прохода 2026-06-10) ----
+// Скан рецепта повторяет ПОРЯДОК draw'ов compose/pickRegion — менять строго синхронно!
+// Каша = чужой растр-призрак (finish 0.3<a<0.95) или разрушительный эффект на весь кадр (a>0.5).
+// Базовый seed со score<1.2 остаётся как есть (любимцы вида saylor #12/#31/#36 нетронуты);
+// иначе берётся первый '~k' с чистым строгим профилем. Для первых 99 это воспроизводит
+// зафиксированную кураторскую карту байт-в-байт, и работает для любого i (коллекции по 500).
+function scanRecipe(seed){const rng=mulberry32(hashStr(seed));
+  rng();let n=1+Math.floor(rng()*5);if(rng()<0.15)n+=2;
+  const L=[];
+  for(let k=0;k<n;k++){
+    const isDB=rng()<0.55;let reg;
+    if(rng()<0.15)reg='full';
+    else{const t2=rng();
+      if(t2<0.20){rng();rng();reg='vstrip';}
+      else if(t2<0.40){rng();rng();reg='hstrip';}
+      else if(t2<0.55){rng();reg='half';}
+      else if(t2<0.72){rng();reg='thirdV';}
+      else if(t2<0.85){rng();reg='thirdH';}
+      else{rng();rng();rng();rng();reg='rect';}}
+    const a=(1+Math.floor(rng()*100))/100,
+          idx=isDB?Math.floor(rng()*EFFECT.length):Math.floor(rng()*FINISH.length);
+    L.push({isDB,reg,a,idx});}
+  return {n,L};}
+const DESTRFX=new Set([5,6,7,8,9,10,11,12,14]);      // dct, сорты, xor, collapse
+function mushScore(r){let s=0;
+  for(const l of r.L){
+    if(!l.isDB&&l.a>0.3&&l.a<0.95)s+=1.2;
+    if(l.isDB&&DESTRFX.has(l.idx)&&l.reg==='full'&&l.a>0.5)s+=1.5;}
+  if(r.n>4)s+=0.5*(r.n-4);
+  return s;}
+function strictOK(r){if(r.n>3)return false;let d=0;
+  for(const l of r.L){
+    if(!l.isDB&&!(l.a<=0.3||l.a>=0.95))return false;
+    if(l.isDB&&DESTRFX.has(l.idx)){d++;
+      if(l.reg==='full'||l.reg==='half')return false;
+      if(l.a>0.65)return false;}}
+  return d<=1;}
+const SEEDCACHE={};
+function pickSeed(i){
+  if(SEEDCACHE[i])return SEEDCACHE[i];
+  let seed='huang-gen-'+i;
+  if(mushScore(scanRecipe(seed))>=1.2){
+    for(let k=1;k<3000;k++){const s2='huang-gen-'+i+'~'+k,r=scanRecipe(s2);
+      if(mushScore(r)===0&&strictOK(r)){seed=s2;break;}}}
+  return SEEDCACHE[i]=seed;}
+
 function compose(i){
   CUR=i;
   buildChannels(i);                                  // press collage + temp grade are per-token, pre-effects
-  const rng=mulberry32(hashStr(SEEDFIX[i]||('huang-gen-'+i)));   // geometry seed (с кураторскими заменами)
+  const rng=mulberry32(hashStr(pickSeed(i)));        // geometry seed (автокурация против «каши»)
   const base=Math.floor(rng()*FINISH.length);
   const work=new Uint8ClampedArray(finishData(base));
   let n=1+Math.floor(rng()*5); if(rng()<0.15)n+=2;
@@ -244,6 +276,7 @@ const DEF={name:'Jensen Huang',ticker:'NVDA',low:140.85,high:236.54,ath:'235.47'
        ['GM',73,3,'%'],['OP MARGIN',60,5,'%'],['EPS',1.2,0.5,''],['FCF',24,8,'B']]};
 let CFG=DEF;
 function setSeries(c){CFG=c?Object.assign({},DEF,c):DEF;}
+function setCount(c){COUNT=Math.max(1,c|0);}
 const fmtNum=v=>v>=1000?Math.round(v).toLocaleString('en-US'):v.toFixed(1);
 
 function pressLayer(i){
@@ -358,7 +391,7 @@ function pressLayer(i){
     g.restore();drawn++;}
   function masthead(){const fs=4.8*S,y2=rng()<0.75?(0.03+rng()*0.03)*H:(0.96+rng()*0.015)*H;  // выходные данные: лист знает свой номер
     x.save();x.font='700 '+fs+'px Georgia,"Times New Roman",serif';x.textAlign='center';x.fillStyle=INK(0.85);
-    x.fillText('No. '+(i+1)+'/99 · VOL. XCIX · JUNE 2026 · '+CFG.copy,W/2,y2);
+    x.fillText('No. '+(i+1)+'/'+COUNT+' · VOL. XCIX · JUNE 2026 · '+CFG.copy,W/2,y2);
     x.strokeStyle=INK(0.7);x.lineWidth=0.5*S;
     x.beginPath();x.moveTo(W*0.07,y2+fs*0.7);x.lineTo(W*0.93,y2+fs*0.7);x.stroke();
     x.beginPath();x.moveTo(W*0.07,y2+fs*0.7+2*S);x.lineTo(W*0.93,y2+fs*0.7+2*S);x.stroke();
@@ -476,5 +509,5 @@ function buildChannels(i){
 }
 function init(w,h){W=w;H=h;SCALE=W/300;rb=W*3;fcv=document.createElement('canvas');fcv.width=W;fcv.height=H;fctx=fcv.getContext('2d');}
 
-window.ENGINE={init,fitMaster,compose,animFrames,setTemp,setPress,setSeries,get W(){return W;},get H(){return H;},get T(){return T;}};
+window.ENGINE={init,fitMaster,compose,animFrames,setTemp,setPress,setSeries,setCount,get W(){return W;},get H(){return H;},get T(){return T;}};
 })();

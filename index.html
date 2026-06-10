@@ -3,25 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>99 generative composites</title>
+<title>thomqu — series</title>
 <style>
   html,body{margin:0;background:#fff;}
+  #nav{position:sticky;top:0;background:rgba(255,255,255,0.94);z-index:5;padding:10px 16px;
+       font:12px ui-monospace,Menlo,monospace;color:#999;border-bottom:1px solid #eee;}
+  #nav a{color:#999;text-decoration:none;padding:0 6px;}
+  #nav a:hover{color:#000;}
+  #nav a.on{color:#000;font-weight:700;}
+  #nav .r{float:right;}
   #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px;}
+  #grid .cell{position:relative;}
   #grid canvas{display:block;width:100%;aspect-ratio:3/4;height:auto;background:#f4f0e8;cursor:pointer;transition:opacity .12s;}
   #grid canvas:hover{opacity:.85;}
+  #grid span{position:absolute;left:8px;bottom:6px;color:rgba(0,0,0,0.35);font:11px ui-monospace,Menlo,monospace;pointer-events:none;}
 </style>
 </head>
 <body>
+<div id="nav"></div>
 <div id="grid"></div>
 <script src="master-data.js"></script>
 <script src="engine.js"></script>
 <script src="series.js"></script>
 <script>
 "use strict";
-const RW=1080,RH=1440;                 // per-tile render resolution (lazy: only rendered when scrolled near)
+const RW=720,RH=960;                   // tile render res (далёкие тайлы освобождаются из памяти)
 const Q=new URLSearchParams(location.search);
 const TEMP=Math.max(0,Math.min(1,parseFloat(Q.get('t')||'0.5')||0.5));
 const SER=(Q.get('s')||'huang').replace(/[^a-z]/g,'');          // серия: huang | saylor | vitalik
+const COUNT=Math.max(1,Math.min(2000,parseInt(Q.get('count')||'500',10)||500));
 function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 
 let MASTERS=[window.MASTER_SRC];       // fallback — один встроенный мастер
@@ -29,8 +39,10 @@ const ICACHE={};
 const midx=i=>hashStr('master-'+SER+'-'+i)%MASTERS.length;      // фото токена выбирается seed'ом
 const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=MASTERS[mi];}));
 
-const cvs=[],done=new Array(99).fill(false),queue=[];let busy=false;
+let TOKENS=[];                         // список id токенов (вся серия или кураторский набор из манифеста)
+const cvs={},done={},queue=[];let busy=false;
 function enqueue(i){if(!done[i]&&queue.indexOf(i)<0){queue.push(i);pump();}}
+function release(i){const cv=cvs[i];if(cv&&done[i]){cv.width=1;cv.height=1;done[i]=false;}}
 function pump(){
   if(busy||!queue.length)return;busy=true;
   const i=queue.shift();
@@ -40,21 +52,39 @@ function pump(){
       cv.getContext('2d').putImageData(new ImageData(ENGINE.compose(i),RW,RH),0,0);done[i]=true;}
     busy=false;pump();},0));
 }
+function nav(){
+  const names={huang:'HUANG/NVDA',saylor:'SAYLOR/MSTR',vitalik:'BUTERIN/ETH'};
+  document.getElementById('nav').innerHTML=
+    Object.keys(names).map(s=>'<a class="'+(s===SER?'on':'')+'" href="generate.html?s='+s+'">'+names[s]+'</a>').join(' · ')
+    +'<span class="r">'+TOKENS.length+' works · <a href="anim10.html?s='+SER+'">live ×10</a> · <a href="curate.html?s='+SER+'">curate</a></span>';
+}
 function build(){
   const grid=document.getElementById('grid');
-  for(let i=0;i<99;i++){const cv=document.createElement('canvas');cv.dataset.i=i;cv.title='#'+(i+1)+' — click for 4K';
-    cv.addEventListener('click',()=>window.open('token.html?n='+(i+1)+'&t='+TEMP.toFixed(3)+'&s='+SER,'_blank'));grid.appendChild(cv);cvs.push(cv);}
-  const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting)enqueue(+e.target.dataset.i);},{rootMargin:'800px 0px'});
-  cvs.forEach(cv=>io.observe(cv));
-  for(let i=0;i<9;i++)enqueue(i);                 // guarantee first rows even if observer is idle
-  window.__renderTile=enqueue;                    // manual hook
+  for(const i of TOKENS){
+    const cell=document.createElement('div');cell.className='cell';
+    const cv=document.createElement('canvas');cv.dataset.i=i;
+    cv.addEventListener('click',()=>window.open('token.html?n='+(i+1)+'&t='+TEMP.toFixed(3)+'&s='+SER,'_blank'));
+    const lab=document.createElement('span');lab.textContent='#'+(i+1);
+    cell.appendChild(cv);cell.appendChild(lab);grid.appendChild(cell);cvs[i]=cv;
+  }
+  const io=new IntersectionObserver(es=>{
+    for(const e of es){const i=+e.target.dataset.i;
+      if(e.isIntersecting)enqueue(i);else release(i);}   // вне зоны — освобождаем буфер
+  },{rootMargin:'1400px 0px'});
+  TOKENS.forEach(i=>io.observe(cvs[i]));
+  for(let k=0;k<6&&k<TOKENS.length;k++)enqueue(TOKENS[k]);
 }
 (async()=>{
-  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
-    if(m.masters&&m.masters.length){MASTERS=m.masters.map(f=>'assets/'+SER+'/'+f);document.title=m.name+' — 99 composites';}}catch(e){}
-  ENGINE.init(RW,RH);ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);
+  let man=null;
+  try{man=await(await fetch('assets/'+SER+'/manifest.json')).json();}catch(e){}
+  if(man&&man.masters&&man.masters.length){MASTERS=man.masters.map(f=>'assets/'+SER+'/'+f);document.title=man.name+' — '+COUNT;}
+  TOKENS=(man&&man.curated&&man.curated.length&&!Q.get('all'))
+    ? man.curated.map(n=>n-1)                            // кураторский набор (1-based в манифесте)
+    : Array.from({length:COUNT},(_,i)=>i);
+  ENGINE.init(RW,RH);ENGINE.setCount(COUNT);
+  ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);
   ENGINE.setTemp(TEMP);ENGINE.setPress(Q.get('press')!=='0');
-  build();
+  nav();build();
 })();
 </script>
 </body>

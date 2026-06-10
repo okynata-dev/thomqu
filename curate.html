@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>curate</title>
+<style>
+  html,body{margin:0;background:#fff;}
+  #nav{position:sticky;top:0;background:rgba(255,255,255,0.96);z-index:5;padding:10px 16px;
+       font:12px ui-monospace,Menlo,monospace;color:#999;border-bottom:1px solid #eee;}
+  #nav a,#nav button{color:#999;text-decoration:none;padding:0 6px;background:none;border:none;
+       font:inherit;cursor:pointer;}
+  #nav a:hover,#nav button:hover{color:#000;}
+  #nav a.on{color:#000;font-weight:700;}
+  #nav b{color:#1a7f37;}
+  #nav .r{float:right;}
+  #grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:8px;}
+  .cell{position:relative;cursor:pointer;}
+  .cell canvas{display:block;width:100%;aspect-ratio:3/4;height:auto;background:#f4f0e8;}
+  .cell span{position:absolute;left:6px;bottom:4px;color:rgba(0,0,0,0.4);font:10px ui-monospace,Menlo,monospace;pointer-events:none;}
+  .cell.keep{outline:4px solid #1a7f37;outline-offset:-4px;}
+  .cell.keep::after{content:'KEEP';position:absolute;top:6px;right:6px;background:#1a7f37;color:#fff;
+       font:10px ui-monospace,Menlo,monospace;padding:1px 5px;}
+</style>
+</head>
+<body>
+<div id="nav"></div>
+<div id="grid"></div>
+<script src="master-data.js"></script>
+<script src="engine.js"></script>
+<script src="series.js"></script>
+<script>
+"use strict";
+// Кураторская: клик по тайлу = keep/нет (зелёная рамка), выбор живёт в localStorage,
+// «export» скачивает JSON {slug, keep:[...]} — он запекается в assets/<slug>/manifest.json как "curated".
+const RW=360,RH=480;
+const Q=new URLSearchParams(location.search);
+const SER=(Q.get('s')||'huang').replace(/[^a-z]/g,'');
+const COUNT=Math.max(1,Math.min(2000,parseInt(Q.get('count')||'500',10)||500));
+const TEMP=0.5;
+const LSKEY='curate-'+SER;
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+
+let KEEP=new Set(JSON.parse(localStorage.getItem(LSKEY)||'[]'));
+let MASTERS=[window.MASTER_SRC];
+const ICACHE={};
+const midx=i=>hashStr('master-'+SER+'-'+i)%MASTERS.length;
+const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=MASTERS[mi];}));
+
+const cvs={},done={},queue=[];let busy=false;
+function enqueue(i){if(!done[i]&&queue.indexOf(i)<0){queue.push(i);pump();}}
+function release(i){const cv=cvs[i];if(cv&&done[i]){cv.width=1;cv.height=1;done[i]=false;}}
+function pump(){
+  if(busy||!queue.length)return;busy=true;
+  const i=queue.shift();
+  if(done[i]){busy=false;pump();return;}
+  getImg(midx(i)).then(im=>setTimeout(()=>{
+    if(im){ENGINE.fitMaster(im);const cv=cvs[i];cv.width=RW;cv.height=RH;
+      cv.getContext('2d').putImageData(new ImageData(ENGINE.compose(i),RW,RH),0,0);done[i]=true;}
+    busy=false;pump();},0));
+}
+function save(){localStorage.setItem(LSKEY,JSON.stringify([...KEEP].sort((a,b)=>a-b)));cnt();}
+function cnt(){document.getElementById('kept').textContent=KEEP.size;}
+function nav(){
+  const names={huang:'HUANG/NVDA',saylor:'SAYLOR/MSTR',vitalik:'BUTERIN/ETH'};
+  document.getElementById('nav').innerHTML=
+    Object.keys(names).map(s=>'<a class="'+(s===SER?'on':'')+'" href="curate.html?s='+s+'">'+names[s]+'</a>').join(' · ')
+    +'<span class="r">kept: <b id="kept">0</b>/'+COUNT
+    +' · <button id="exp">⤓ export</button> · <button id="clr">clear</button>'
+    +' · <a href="generate.html?s='+SER+'">grid</a></span>';
+  document.getElementById('exp').onclick=()=>{
+    const data={slug:SER,keep:[...KEEP].sort((a,b)=>a-b).map(i=>i+1)};   // 1-based для манифеста
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,1)],{type:'application/json'}));
+    a.download='curated-'+SER+'.json';a.click();};
+  document.getElementById('clr').onclick=()=>{if(confirm('Сбросить выбор по '+SER+'?')){KEEP=new Set();save();
+    document.querySelectorAll('.cell.keep').forEach(c=>c.classList.remove('keep'));}};
+  cnt();
+}
+function build(){
+  const grid=document.getElementById('grid');
+  for(let i=0;i<COUNT;i++){
+    const cell=document.createElement('div');cell.className='cell'+(KEEP.has(i)?' keep':'');
+    const cv=document.createElement('canvas');cv.dataset.i=i;
+    const lab=document.createElement('span');lab.textContent='#'+(i+1);
+    cell.appendChild(cv);cell.appendChild(lab);grid.appendChild(cell);cvs[i]=cv;
+    cell.addEventListener('click',()=>{
+      if(KEEP.has(i)){KEEP.delete(i);cell.classList.remove('keep');}
+      else{KEEP.add(i);cell.classList.add('keep');}
+      save();});
+    cell.addEventListener('contextmenu',e=>{e.preventDefault();           // ПКМ — открыть крупно
+      window.open('token.html?n='+(i+1)+'&s='+SER,'_blank');});
+  }
+  const io=new IntersectionObserver(es=>{
+    for(const e of es){const i=+e.target.dataset.i;
+      if(e.isIntersecting)enqueue(i);else release(i);}
+  },{rootMargin:'1600px 0px'});
+  for(let i=0;i<COUNT;i++)io.observe(cvs[i]);
+  for(let k=0;k<10;k++)enqueue(k);
+}
+(async()=>{
+  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
+    if(m.masters&&m.masters.length)MASTERS=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
+  ENGINE.init(RW,RH);ENGINE.setCount(COUNT);
+  ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);
+  ENGINE.setTemp(TEMP);ENGINE.setPress(true);
+  nav();build();
+})();
+</script>
+</body>
+</html>
