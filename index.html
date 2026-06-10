@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HUANG — 99 generative composites</title>
+<style>
+  html,body{margin:0;background:#fff;}
+  #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px;}
+  #grid canvas{display:block;width:100%;aspect-ratio:3/4;height:auto;background:#f4f0e8;cursor:pointer;transition:opacity .12s;}
+  #grid canvas:hover{opacity:.85;}
+</style>
+</head>
+<body>
+<div id="grid"></div>
+<script src="master-data.js"></script>
+<script src="engine.js"></script>
+<script>
+"use strict";
+const RW=1080,RH=1440;                 // per-tile render resolution (lazy: only rendered when scrolled near)
+const TEMP=Math.max(0,Math.min(1,parseFloat(new URLSearchParams(location.search).get('t')||'0.5')||0.5)); // ?t= NVDA temperature, 0.5 = clean
+const cvs=[],done=new Array(99).fill(false),queue=[];let busy=false;
+
+function enqueue(i){if(!done[i]&&queue.indexOf(i)<0){queue.push(i);pump();}}
+function pump(){
+  if(busy||!queue.length)return;busy=true;
+  setTimeout(()=>{const i=queue.shift();
+    if(!done[i]){const cv=cvs[i];cv.width=RW;cv.height=RH;cv.getContext('2d').putImageData(new ImageData(ENGINE.compose(i),RW,RH),0,0);done[i]=true;}
+    busy=false;pump();},0);
+}
+function build(){
+  const grid=document.getElementById('grid');
+  for(let i=0;i<99;i++){const cv=document.createElement('canvas');cv.dataset.i=i;cv.title='#'+(i+1)+' — click for 4K';
+    cv.addEventListener('click',()=>window.open('token.html?n='+(i+1)+'&t='+TEMP.toFixed(3),'_blank'));grid.appendChild(cv);cvs.push(cv);}
+  const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting)enqueue(+e.target.dataset.i);},{rootMargin:'800px 0px'});
+  cvs.forEach(cv=>io.observe(cv));
+  for(let i=0;i<9;i++)enqueue(i);                 // guarantee first rows even if observer is idle
+  window.__renderTile=enqueue;                    // manual hook
+}
+const img=new Image();img.onload=()=>{ENGINE.init(RW,RH);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(new URLSearchParams(location.search).get('press')!=='0');build();};img.src=window.MASTER_SRC;
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HUANG — live glitch ×10</title>
+<style>
+  html,body{margin:0;background:#fff;}
+  #grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:14px;}
+  .cell{position:relative;}
+  .cell canvas{display:block;width:100%;aspect-ratio:3/4;height:auto;background:#f4f0e8;cursor:pointer;}
+  .cell span{position:absolute;left:6px;bottom:4px;color:rgba(0,0,0,0.45);font:10px ui-monospace,Menlo,monospace;pointer-events:none;}
+</style>
+</head>
+<body>
+<div id="grid"></div>
+<script src="master-data.js"></script>
+<script src="engine.js"></script>
+<script src="glitch-player.js"></script>
+<script>
+"use strict";
+const p=new URLSearchParams(location.search);
+const TEMP=Math.max(0,Math.min(1,parseFloat(p.get('t')||'0.5')||0.5));
+const FPS=Math.max(4,Math.min(300,parseInt(p.get('fps')||'300',10)||300));
+const MULT=Math.max(1,Math.round(FPS/60)),TICK=Math.round(1000/Math.min(FPS,60));
+const PICKS=[3,8,14,27,33,42,57,66,78,95];          // 10 примеров вразброс по коллекции
+const RW=480,RH=640;                                 // рабочее разрешение тайла
+
+const players=[];let TEXIMGS=[];
+function loadTex(srcs){return Promise.all(srcs.map(s=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=s;}))).then(a=>a.filter(Boolean));}
+const img=new Image();
+img.onload=()=>{ENGINE.init(RW,RH);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');
+  const grid=document.getElementById('grid');
+  let k=0;
+  loadTex(['tex-chips.jpg','tex-city.jpg']).then(t=>{TEXIMGS=t;next();});
+  function next(){                                   // строим по одному, чтобы страница оживала постепенно
+    if(k>=PICKS.length)return;
+    const n=PICKS[k++];
+    const cell=document.createElement('div');cell.className='cell';
+    const cv=document.createElement('canvas');cv.width=RW;cv.height=RH;
+    cv.onclick=()=>window.open('anim.html?n='+n+'&t='+TEMP.toFixed(3),'_blank');
+    const lab=document.createElement('span');
+    cell.appendChild(cv);cell.appendChild(lab);grid.appendChild(cell);
+    setTimeout(()=>{
+      const frames=ENGINE.animFrames(n-1,6);
+      const cvs=frames.map(f=>{const c=document.createElement('canvas');c.width=RW;c.height=RH;c.getContext('2d').putImageData(f,0,0);return c;});
+      const pl=GLITCH.build(n,cvs,cv.getContext('2d'),TEXIMGS);
+      lab.textContent='#'+n+' · '+pl.style+' · '+pl.staticPct+'%';
+      players.push(pl);
+      next();
+    },30);
+  }
+};
+img.src=window.MASTER_SRC;
+
+setInterval(()=>{for(const pl of players)pl.step(MULT);},TICK);
+</script>
+</body>
+</html>

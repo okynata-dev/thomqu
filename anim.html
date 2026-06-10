@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HUANG — live glitch</title>
+<style>
+  html,body{margin:0;height:100%;background:#fff;}
+  body{display:flex;align-items:center;justify-content:center;}
+  canvas{max-width:100vw;max-height:96vh;display:block;cursor:pointer;}
+  #cap{position:fixed;bottom:8px;left:0;right:0;text-align:center;color:#ccc;font:11px ui-monospace,Menlo,monospace;user-select:none;}
+  #cap a{color:#ccc;text-decoration:none;padding:0 4px;}
+  #cap a:hover{color:#666;}
+</style>
+</head>
+<body>
+<div id="wrap"></div>
+<div id="cap">rendering frames…</div>
+<script src="master-data.js"></script>
+<script src="engine.js"></script>
+<script src="glitch-player.js"></script>
+<script>
+"use strict";
+const p=new URLSearchParams(location.search);
+const N=Math.max(1,Math.min(99,parseInt(p.get('n')||'1',10)||1));
+const LONG=Math.max(600,Math.min(4096,parseInt(p.get('res')||'1200',10)||1200));
+const TEMP=Math.max(0,Math.min(1,parseFloat(p.get('t')||'0.5')||0.5));
+const FPS=Math.max(4,Math.min(300,parseInt(p.get('fps')||'300',10)||300));
+const MULT=Math.max(1,Math.round(FPS/60)),TICK=Math.round(1000/Math.min(FPS,60));
+const H=LONG,Wt=Math.round(H*0.75);
+
+let playing=true,TEXIMGS=[];
+// необязательные реальные фото: положи tex-chips.jpg / tex-city.jpg рядом — будут семплироваться они
+function loadTex(srcs){return Promise.all(srcs.map(s=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=s;}))).then(a=>a.filter(Boolean));}
+const img=new Image();
+img.onload=()=>{ENGINE.init(Wt,H);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');
+  loadTex(['tex-chips.jpg','tex-city.jpg']).then(t=>{TEXIMGS=t;setTimeout(start,30);});};
+img.src=window.MASTER_SRC;
+
+function start(){
+  const frames=ENGINE.animFrames(N-1,7);
+  const cvs=frames.map(f=>{const c=document.createElement('canvas');c.width=Wt;c.height=H;c.getContext('2d').putImageData(f,0,0);return c;});
+  const cv=document.createElement('canvas');cv.width=Wt;cv.height=H;
+  document.getElementById('wrap').appendChild(cv);
+  cv.onclick=()=>playing=!playing;
+
+  const player=GLITCH.build(N,cvs,cv.getContext('2d'),TEXIMGS);
+
+  document.getElementById('cap').innerHTML=
+    '#'+N+'/99 · live glitch · '+player.style+' · '+player.staticPct+'% static · '+FPS+'fps · t '+TEMP.toFixed(2)
+    +' · <a href="token.html?n='+N+'&t='+TEMP.toFixed(3)+'">still</a>'
+    +' · <a href="anim.html?n='+((N%99)+1)+'&t='+TEMP.toFixed(3)+'&fps='+FPS+'">next ›</a>'
+    +' · <a href="anim10.html?t='+TEMP.toFixed(3)+'">×10</a>'
+    +' · click = pause';
+
+  setInterval(()=>{if(playing)player.step(MULT);},TICK);
+}
+</script>
+</body>
+</html>
