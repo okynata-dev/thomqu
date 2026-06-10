@@ -18,6 +18,7 @@
 <div id="cap">rendering frames…</div>
 <script src="master-data.js"></script>
 <script src="engine.js"></script>
+<script src="series.js"></script>
 <script src="glitch-player.js"></script>
 <script>
 "use strict";
@@ -37,7 +38,8 @@ let playing=true;
   try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
     if(m.masters&&m.masters.length)masters=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
   const img=new Image();
-  img.onload=()=>{ENGINE.init(Wt,H);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');setTimeout(start,30);};
+  img.onload=()=>{ENGINE.init(Wt,H);ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);
+    ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');setTimeout(start,30);};
   img.src=masters[hashStr('master-'+SER+'-'+(N-1))%masters.length];
 })();
 
@@ -48,7 +50,7 @@ function start(){
   document.getElementById('wrap').appendChild(cv);
   cv.onclick=()=>playing=!playing;
 
-  const player=GLITCH.build(SER+'-'+N,cvs,cv.getContext('2d'));
+  const player=GLITCH.build(SER+'-'+N,cvs,cv.getContext('2d'),(window.SERIES_CFG&&SERIES_CFG[SER]||{}).glitch);
 
   document.getElementById('cap').innerHTML=
     '#'+N+'/99 · live glitch · '+player.style+' · '+player.staticPct+'% static · '+FPS+'fps · t '+TEMP.toFixed(2)

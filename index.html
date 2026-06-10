@@ -15,6 +15,7 @@
 <div id="grid"></div>
 <script src="master-data.js"></script>
 <script src="engine.js"></script>
+<script src="series.js"></script>
 <script>
 "use strict";
 const RW=1080,RH=1440;                 // per-tile render resolution (lazy: only rendered when scrolled near)
@@ -51,7 +52,8 @@ function build(){
 (async()=>{
   try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
     if(m.masters&&m.masters.length){MASTERS=m.masters.map(f=>'assets/'+SER+'/'+f);document.title=m.name+' — 99 composites';}}catch(e){}
-  ENGINE.init(RW,RH);ENGINE.setTemp(TEMP);ENGINE.setPress(Q.get('press')!=='0');
+  ENGINE.init(RW,RH);ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);
+  ENGINE.setTemp(TEMP);ENGINE.setPress(Q.get('press')!=='0');
   build();
 })();
 </script>

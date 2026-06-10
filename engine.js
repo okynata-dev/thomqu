@@ -236,6 +236,16 @@ const SECT=[['AMD',140],['TSM',190],['AVGO',1200],['MSFT',510],['INTC',20],['SMC
 let BLEED=false;                 // bleed-through: зеркальная бледная «обратная сторона листа»
 const INK=a=>'rgba(16,13,17,'+(BLEED?a*0.13:a)+')', RED=a=>'rgba(186,24,38,'+(BLEED?a*0.13:a)+')';
 
+// ---- серия: вся специфика (тикер, band, контент-пулы) — конфиг; дефолт = huang/NVDA ----
+const DEF={name:'Jensen Huang',ticker:'NVDA',low:140.85,high:236.54,ath:'235.47',copy:'$5T A COPY',
+ bubbleRow:['ARTIFICIAL INTELLIGENCE','20__','2026'],
+ heads:HEADS,ticks:TICKS,stamps:STAMPS,quotes:QUOTES,pageidx:PAGEIDX,corpus:CORPUS,sect:SECT,
+ earn:[['REV',58,8,'B'],['DATA CTR',46,7,'B'],['GAMING',2.8,1.2,'B'],['AUTO',0.5,0.4,'B'],
+       ['GM',73,3,'%'],['OP MARGIN',60,5,'%'],['EPS',1.2,0.5,''],['FCF',24,8,'B']]};
+let CFG=DEF;
+function setSeries(c){CFG=c?Object.assign({},DEF,c):DEF;}
+const fmtNum=v=>v>=1000?Math.round(v).toLocaleString('en-US'):v.toFixed(1);
+
 function pressLayer(i){
   if(!PCV){PCV=document.createElement('canvas');PCV.width=W;PCV.height=H;PCTX=PCV.getContext('2d');
            KCV=document.createElement('canvas');KCV.width=W;KCV.height=H;KCTX=KCV.getContext('2d');}
@@ -244,10 +254,10 @@ function pressLayer(i){
   const CW=Math.PI/2;                                       // "повернуть на 90° вправо" — текст читается сверху вниз
   const KO='rgba(247,244,237,0.96)';                        // выворотка: буквы бумагой, без плашек (слой KCV)
   const placed=[];                                          // боксы заголовков/штампов — мишени для красных пометок
-  const band=140.85+T*(236.54-140.85);                      // цена, имплицированная температурой (замороженный band)
+  const band=CFG.low+T*(CFG.high-CFG.low);                  // цена, имплицированная температурой (замороженный band)
   const pick=o=>{const r=rng(),p=r<HEAT?o.hot:r<HEAT+BURN?o.cold:o.mid;return p[(rng()*p.length)|0];};
   const pickS=o=>{const r=rng();return r<HEAT?o.hot:r<HEAT+BURN?o.cold:o.mid;};
-  function headline(){const txt=pick(HEADS),serif=rng()<0.4,fs=(13+rng()*15)*S,vert=rng()<0.22,
+  function headline(){const txt=pick(CFG.heads),serif=rng()<0.4,fs=(13+rng()*15)*S,vert=rng()<0.22,
     ko=!BLEED&&rng()<0.25,g=ko?KCTX:x,px=vert?(0.08+rng()*0.84)*W:W/2,
     py=vert?H/2:(rng()<0.5?(0.07+rng()*0.18)*H:(0.74+rng()*0.19)*H);
     g.save();g.translate(px,py);g.rotate(vert?CW+(rng()*6-3)*Math.PI/180:(rng()*8-4)*Math.PI/180);
@@ -257,18 +267,18 @@ function pressLayer(i){
     g.fillStyle=ko?KO:INK(0.92);g.fillText(txt,0,0);g.restore();
     if(!BLEED)placed.push(vert?{x:px-fs*0.7,y:py-w/2,w:fs*1.4,h:w}:{x:px-w/2,y:py-fs*0.7,w:w,h:fs*1.4});
     drawn++;}
-  function sectorLine(){let s='NVDA '+band.toFixed(2)+(HEAT>=BURN?'▲':'▼');     // лента сектора, знак по термометру
-    for(const e of SECT){const up=rng()<0.5+(HEAT-BURN)*0.45;
+  function sectorLine(){let s=CFG.ticker+' '+band.toFixed(2)+(HEAT>=BURN?'▲':'▼');  // лента сектора, знак по термометру
+    for(const e of CFG.sect){const up=rng()<0.5+(HEAT-BURN)*0.45;
       s+='   '+e[0]+' '+(e[1]*(1+(rng()-0.5)*0.08+(HEAT-BURN)*0.1)).toFixed(2)+(up?'▲':'▼');}
     return s;}
-  function ticker(){const txt=rng()<0.3?sectorLine():pick(TICKS),fs=(6.5+rng()*4.5)*S,rep=(txt+'   ').repeat(8),m=rng();
+  function ticker(){const txt=rng()<0.3?sectorLine():pick(CFG.ticks),fs=(6.5+rng()*4.5)*S,rep=(txt+'   ').repeat(8),m=rng();
     x.save();x.font='600 '+fs+'px ui-monospace,Menlo,Consolas,monospace';x.fillStyle=rng()<0.3?RED(0.9):INK(0.85);
     if(m<0.25){x.translate(rng()<0.5?fs*0.4+rng()*W*0.35:W-fs*1.1-rng()*W*0.35,0);x.rotate(CW);x.fillText(rep,-rng()*H*0.3,0);}      // CW: сверху вниз
     else if(m<0.5){x.translate(rng()<0.5?fs*1.1:W-fs*0.3,H);x.rotate(-CW);x.fillText(rep,-rng()*H*0.4,0);}                          // CCW: снизу вверх
     else x.fillText(rep,-rng()*W,(0.04+rng()*0.92)*H);
     x.restore();drawn++;}
   function column(){const vert=rng()<0.2,ext=vert?H:W,cw=(0.20+rng()*0.14)*ext,
-    fs=4.2*S,lh=fs*1.32,lines=((0.22+rng()*0.40)*(vert?W:H)/lh)|0,words=pickS(CORPUS).split(' ');
+    fs=4.2*S,lh=fs*1.32,lines=((0.22+rng()*0.40)*(vert?W:H)/lh)|0,words=pickS(CFG.corpus).split(' ');
     x.save();
     if(vert){x.translate((0.25+rng()*0.65)*W,(0.02+rng()*0.15)*H);x.rotate(CW);}
     else x.translate(rng()<0.5?(0.03+rng()*0.07)*W:W-cw-(0.03+rng()*0.07)*W,(0.06+rng()*0.30)*H);
@@ -279,7 +289,7 @@ function pressLayer(i){
         if(x.measureText(nx).width>cw&&line)break;line=nx;wi++;}
       x.fillText(line,0,l*lh);}
     x.restore();drawn++;}
-  function stamp(){const txt=pick(STAMPS),fs=(24+rng()*30)*S,ko=!BLEED&&rng()<0.25,g=ko?KCTX:x,
+  function stamp(){const txt=pick(CFG.stamps),fs=(24+rng()*30)*S,ko=!BLEED&&rng()<0.25,g=ko?KCTX:x,
     px=(0.2+rng()*0.6)*W,py=(0.2+rng()*0.6)*H;
     g.save();g.translate(px,py);
     g.rotate(rng()<0.2?CW:(rng()*30-15)*Math.PI/180);
@@ -294,16 +304,15 @@ function pressLayer(i){
     if(rng()<0.2)x.rotate(CW);
     x.font='600 '+fs+'px ui-monospace,Menlo,Consolas,monospace';x.textAlign='left';
     if(earn){
-      const er=[['REV',58+rng()*8,'B'],['DATA CTR',46+rng()*7,'B'],['GAMING',2.8+rng()*1.2,'B'],
-                ['AUTO',0.5+rng()*0.4,'B'],['GM',73+rng()*3,'%'],['OP MARGIN',60+rng()*5,'%'],
-                ['EPS',1.2+rng()*0.5,''],['FCF',24+rng()*8,'B']];
+      const er=CFG.earn.map(e=>[e[0],e[1]+rng()*e[2],e[3]]);
       for(let r2=0;r2<er.length;r2++){const e=er[r2];
         x.fillStyle=INK(0.85);x.fillText(e[0],0,r2*lh);
-        x.fillText((e[1]).toFixed(1)+e[2],fs*7.2,r2*lh);}
+        x.fillText(fmtNum(e[1])+e[2],fs*7.2,r2*lh);}
     }else{
-      let pr=band+(rng()-0.5)*30;const bias=0.45+BURN*0.3-HEAT*0.12;   // жар — зелёные дни, выгорание — красные
+      const span=CFG.high-CFG.low;
+      let pr=band+(rng()-0.5)*span*0.3;const bias=0.45+BURN*0.3-HEAT*0.12;   // жар — зелёные дни, выгорание — красные
       for(let r2=0;r2<rows;r2++){
-        const chg=(rng()-bias)*(4+BURN*4);pr=Math.max(60,Math.min(245,pr+(rng()-bias)*6));
+        const chg=(rng()-bias)*(4+BURN*4);pr=Math.max(CFG.low*0.45,Math.min(CFG.high*1.05,pr+(rng()-bias)*span*0.06));
         x.fillStyle=chg<0?(rng()<0.6?RED(0.85):INK(0.85)):INK(0.85);
         x.fillText('2026-0'+(1+((rng()*6)|0))+'-'+String(1+((rng()*28)|0)).padStart(2,'0')
           +'  '+pr.toFixed(2)+'  '+(chg>=0?'+':'')+chg.toFixed(2)+'%',0,r2*lh);}
@@ -321,7 +330,7 @@ function pressLayer(i){
     x.font='600 '+3.6*S+'px ui-monospace,Menlo,monospace';x.textAlign='right';
     for(let g=0;g<=4;g++){const yy=g/4*chh;
       x.beginPath();x.moveTo(0,yy);x.lineTo(cw,yy);x.stroke();
-      x.fillStyle=INK(0.8);x.fillText((236.54-(236.54-140.85)*g/4).toFixed(0),-2*S,yy+1.3*S);}
+      x.fillStyle=INK(0.8);x.fillText((CFG.high-(CFG.high-CFG.low)*g/4).toFixed(0),-2*S,yy+1.3*S);}
     if(candle){const bw=cw/n*0.62;
       for(let k=0;k<n;k++){const o=k?pts[k-1]:pts[0],cl=pts[k],up=cl>=o,xx=k*(cw/n)+bw/2,
         hi=Math.min(0.99,Math.max(o,cl)+rng()*0.03),lo=Math.max(0.01,Math.min(o,cl)-rng()*0.03);
@@ -333,7 +342,7 @@ function pressLayer(i){
     const mY=(1-Math.max.apply(null,pts))*chh;                      // dashed ATH marker
     x.setLineDash([5*S,3.5*S]);x.strokeStyle=INK(0.7);x.lineWidth=0.7*S;
     x.beginPath();x.moveTo(0,mY);x.lineTo(cw,mY);x.stroke();x.setLineDash([]);
-    x.fillStyle=INK(0.85);x.textAlign='left';x.fillText('ATH 235.47',2*S,mY-1.5*S);
+    x.fillStyle=INK(0.85);x.textAlign='left';x.fillText('ATH '+CFG.ath,2*S,mY-1.5*S);
     const lx=cw,ly=(1-pts[n-1])*chh;                                // последний клоуз = цена по термометру
     x.beginPath();x.arc(lx,ly,1.8*S,0,7);x.fill();
     x.fillText(band.toFixed(2),lx+2.5*S,ly+1.2*S);
@@ -349,7 +358,7 @@ function pressLayer(i){
     g.restore();drawn++;}
   function masthead(){const fs=4.8*S,y2=rng()<0.75?(0.03+rng()*0.03)*H:(0.96+rng()*0.015)*H;  // выходные данные: лист знает свой номер
     x.save();x.font='700 '+fs+'px Georgia,"Times New Roman",serif';x.textAlign='center';x.fillStyle=INK(0.85);
-    x.fillText('No. '+(i+1)+'/99 · VOL. XCIX · JUNE 2026 · $5T A COPY',W/2,y2);
+    x.fillText('No. '+(i+1)+'/99 · VOL. XCIX · JUNE 2026 · '+CFG.copy,W/2,y2);
     x.strokeStyle=INK(0.7);x.lineWidth=0.5*S;
     x.beginPath();x.moveTo(W*0.07,y2+fs*0.7);x.lineTo(W*0.93,y2+fs*0.7);x.stroke();
     x.beginPath();x.moveTo(W*0.07,y2+fs*0.7+2*S);x.lineTo(W*0.93,y2+fs*0.7+2*S);x.stroke();
@@ -366,18 +375,19 @@ function pressLayer(i){
       x.textAlign='right';x.fillText(b[1],colw,y2);});
     const y2=(BUBBLES.length+1.4)*lh,popped=BURN>0.3;                  // после схлопывания год известен
     x.fillStyle=popped?RED(0.9):INK(0.85);
-    x.textAlign='left';x.fillText('ARTIFICIAL INTELLIGENCE',0,y2);
-    x.textAlign='right';x.fillText(popped?'2026':'20__',colw,y2);
+    x.textAlign='left';x.fillText(CFG.bubbleRow[0],0,y2);
+    x.textAlign='right';x.fillText(popped?CFG.bubbleRow[2]:CFG.bubbleRow[1],colw,y2);
     x.restore();drawn++;}
   function orderBook(){const fs=(4.2+rng()*1.6)*S,lh=fs*1.5,rows=5+((rng()*4)|0),colw=fs*9;
     x.save();x.translate((0.08+rng()*0.55)*W,(0.08+rng()*0.6)*H);if(rng()<0.15)x.rotate(CW);
     x.font='600 '+fs+'px ui-monospace,Menlo,Consolas,monospace';x.textAlign='left';
     x.fillStyle=INK(0.85);x.fillText('BID',0,0);x.fillText('ASK',colw,0);
+    const tick2=(CFG.high-CFG.low)/380;                  // шаг стакана масштабируется к band
     for(let r2=1;r2<=rows;r2++){
       x.fillStyle=INK(0.8);
-      x.fillText((band-r2*(0.05+rng()*0.25)).toFixed(2)+' ×'+((50+rng()*900)|0),0,r2*lh);
+      x.fillText((band-r2*tick2*(0.2+rng())).toFixed(2)+' ×'+((50+rng()*900)|0),0,r2*lh);
       x.fillStyle=rng()<0.5?RED(0.8):INK(0.8);
-      x.fillText((band+r2*(0.05+rng()*0.25)).toFixed(2)+' ×'+((50+rng()*900)|0),colw,r2*lh);}
+      x.fillText((band+r2*tick2*(0.2+rng())).toFixed(2)+' ×'+((50+rng()*900)|0),colw,r2*lh);}
     x.restore();drawn++;}
   function cropMarks(){const m=0.035*W,len=0.05*W;                     // пробный оттиск из цеха: кресты приводки
     x.save();x.strokeStyle=INK(0.65);x.lineWidth=0.6*S;
@@ -466,5 +476,5 @@ function buildChannels(i){
 }
 function init(w,h){W=w;H=h;SCALE=W/300;rb=W*3;fcv=document.createElement('canvas');fcv.width=W;fcv.height=H;fctx=fcv.getContext('2d');}
 
-window.ENGINE={init,fitMaster,compose,animFrames,setTemp,setPress,get W(){return W;},get H(){return H;},get T(){return T;}};
+window.ENGINE={init,fitMaster,compose,animFrames,setTemp,setPress,setSeries,get W(){return W;},get H(){return H;},get T(){return T;}};
 })();

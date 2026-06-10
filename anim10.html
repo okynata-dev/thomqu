@@ -16,6 +16,7 @@
 <div id="grid"></div>
 <script src="master-data.js"></script>
 <script src="engine.js"></script>
+<script src="series.js"></script>
 <script src="glitch-player.js"></script>
 <script>
 "use strict";
@@ -37,7 +38,8 @@ const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();
 (async()=>{
   try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
     if(m.masters&&m.masters.length)MASTERS=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
-  ENGINE.init(RW,RH);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');
+  ENGINE.init(RW,RH);ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);
+  ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');
   const grid=document.getElementById('grid');
   let k=0;
   next();
@@ -53,7 +55,7 @@ const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();
       if(im){ENGINE.fitMaster(im);
         const frames=ENGINE.animFrames(n-1,6);
         const cvs=frames.map(f=>{const c=document.createElement('canvas');c.width=RW;c.height=RH;c.getContext('2d').putImageData(f,0,0);return c;});
-        const pl=GLITCH.build(SER+'-'+n,cvs,cv.getContext('2d'));
+        const pl=GLITCH.build(SER+'-'+n,cvs,cv.getContext('2d'),(window.SERIES_CFG&&SERIES_CFG[SER]||{}).glitch);
         lab.textContent='#'+n+' · '+pl.style+' · '+pl.staticPct+'%';
         players.push(pl);}
       next();

@@ -9,9 +9,11 @@ function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCo
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 const WORDS=['AI','NVDA','208.64','$5T','BUBBLE','SELL?','×40','GPU','73.4','RECORD','PANIC','MOON','TOP?'];
 
-function build(n,cvs,ctx,texs){
+function build(n,cvs,ctx,gcfg){
   const Wt=cvs[0].width,H=cvs[0].height,NF=cvs.length,S2=Wt/900,
-        sr=mulberry32(hashStr('huang-tear-'+n));
+        sr=mulberry32(hashStr('huang-tear-'+n)),
+        GW=(gcfg&&gcfg.words)||WORDS,                      // пер-серийные слова/заголовки/тикеры
+        GH=(gcfg&&gcfg.heads)||null,GT=(gcfg&&gcfg.ticks)||null;
   // ---- маска разрывов: разрыв следует самому изображению, а не случайной геометрии ----
   // Уорхол: непропечатка живёт в тональных зонах оттиска, серийность — «бракованная» ячейка сетки.
   // XCOPY: глитч живёт в семантических зонах — цензор-бар, силуэт, целая зона мерцает.
@@ -77,7 +79,7 @@ function build(n,cvs,ctx,texs){
             rr=cell*0.62*Math.pow(1-l/255,0.8)*(0.40+fr0);
       if(rr>cell*0.18){mx.beginPath();mx.arc(cx2,cy2,rr,0,7);mx.fill();}}}
   // press-мотив и акценты: прозрачные надписи + трещина-график (есть во всех мотивах)
-  function holeWord(){const w=WORDS[(sr()*WORDS.length)|0],fs=(26+sr()*50)*S2;
+  function holeWord(){const w=GW[(sr()*GW.length)|0],fs=(26+sr()*50)*S2;
     mx.save();mx.translate(Wt*(0.1+sr()*0.8),H*(0.08+sr()*0.84));
     mx.rotate(sr()<0.2?Math.PI/2:(sr()*2-1)*0.1);
     mx.font='900 '+fs+'px '+(sr()<0.35?'Georgia,"Times New Roman",serif':'"Helvetica Neue",Helvetica,Arial,sans-serif');
@@ -116,8 +118,8 @@ function build(n,cvs,ctx,texs){
     const kind=tr();
     g.fillStyle=tr()<0.08?'rgba(170,24,36,0.85)':INK2(0.88);
     if(kind<0.35){                                        // гигантские глифы — в дырах фрагменты букв
-      const m2=1+((tr()*2)|0);
-      for(let k=0;k<m2;k++){const w=TXT.big[(tr()*TXT.big.length)|0],fs=H*(0.22+tr()*0.3);
+      const big=GW||TXT.big,m2=1+((tr()*2)|0);
+      for(let k=0;k<m2;k++){const w=big[(tr()*big.length)|0],fs=H*(0.22+tr()*0.3);
         g.save();g.translate(Wt*(0.05+tr()*0.9),H*(0.1+tr()*0.85));
         if(tr()<0.25)g.rotate(Math.PI/2);
         g.font='900 '+fs+'px "Helvetica Neue",Helvetica,Arial,sans-serif';
@@ -125,13 +127,15 @@ function build(n,cvs,ctx,texs){
     else if(kind<0.6){                                    // тикерная стена
       const fs=(7+tr()*5)*S2,lh=fs*1.7;
       g.font='600 '+fs+'px ui-monospace,Menlo,monospace';g.textAlign='left';
-      for(let y2=lh;y2<H+lh;y2+=lh){const t2=TXT.tick[(tr()*TXT.tick.length)|0];
+      const tk=GT||TXT.tick;
+      for(let y2=lh;y2<H+lh;y2+=lh){const t2=tk[(tr()*tk.length)|0];
         g.fillText((t2+'   ').repeat(4),-tr()*Wt*0.5,y2);}}
     else if(kind<0.85){                                   // колонки заголовков — серая фактура текста
       const fs=(8+tr()*6)*S2,lh=fs*1.55;
       g.font='700 '+fs+'px Georgia,"Times New Roman",serif';g.textAlign='left';
+      const hd=GH||TXT.head;
       for(let y2=lh;y2<H+lh;y2+=lh)
-        g.fillText(TXT.head[(tr()*TXT.head.length)|0]+'  ·  '+TXT.head[(tr()*TXT.head.length)|0],-tr()*Wt*0.3,y2);}
+        g.fillText(hd[(tr()*hd.length)|0]+'  ·  '+hd[(tr()*hd.length)|0],-tr()*Wt*0.3,y2);}
     else{                                                 // таблица чисел
       const fs=(6.5+tr()*4)*S2,lh=fs*1.8,colw=fs*8;
       g.font='600 '+fs+'px ui-monospace,Menlo,monospace';g.textAlign='left';

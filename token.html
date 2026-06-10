@@ -21,6 +21,7 @@
 <div id="cap"></div>
 <script src="master-data.js"></script>
 <script src="engine.js"></script>
+<script src="series.js"></script>
 <script>
 "use strict";
 const p=new URLSearchParams(location.search);
@@ -37,7 +38,8 @@ const go=n=>location.href='token.html?n='+((n+98)%99+1)+'&res='+LONG+'&t='+TEMP.
   try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
     if(m.masters&&m.masters.length)masters=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
   const img=new Image();
-  img.onload=()=>{ENGINE.init(Wt,H);ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');setTimeout(render,30);};
+  img.onload=()=>{ENGINE.init(Wt,H);ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);
+    ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');setTimeout(render,30);};
   img.src=masters[hashStr('master-'+SER+'-'+(N-1))%masters.length];                 // фото токена — по seed'у
 })();
 
