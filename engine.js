@@ -439,6 +439,36 @@ function pressLayer(i){
     for(let k=0;k<n;k++){const c=cols[k%4];x.fillStyle='rgb('+c[0]+','+c[1]+','+c[2]+')';
       x.fillRect(px+(vert?0:k*(sz+2*S)),py+(vert?k*(sz+2*S):0),sz,sz);}
     x.restore();drawn++;}
+  // большой шелкографский логотип серии — уорхоловский оверпринт с CMYK-сдвигом плит
+  function ethDiamond(g,cx,cy,hh,col,a){const w2=hh*0.60,
+    T=[cx,cy-hh/2],ML=[cx-w2/2,cy-hh*0.06],MR=[cx+w2/2,cy-hh*0.06],C=[cx,cy+hh*0.10],B=[cx,cy+hh/2];
+    const face=(p,al)=>{g.globalAlpha=a*al;g.fillStyle=col;g.beginPath();
+      g.moveTo(p[0][0],p[0][1]);for(let k=1;k<p.length;k++)g.lineTo(p[k][0],p[k][1]);g.closePath();g.fill();};
+    face([T,MR,C],0.50);face([T,C,ML],0.85);          // upper gem: right light, left dark
+    face([ML,C,B],0.85);face([C,MR,B],0.50);          // lower gem
+    g.globalAlpha=1;}
+  function drawGlyph(g,L,cx,cy,hh,col,a){
+    if(L.kind==='eth'){ethDiamond(g,cx,cy,hh,col,a);return;}
+    g.save();g.translate(cx,cy);g.font='900 '+hh+'px "Helvetica Neue",Arial,sans-serif';
+    g.textAlign='center';g.textBaseline='middle';g.globalAlpha=a;g.fillStyle=col;
+    g.fillText(L.text,0,0);g.restore();g.globalAlpha=1;}
+  function logoPlate(){const L=CFG.logo;if(!L)return;
+    const hh=(0.34+rng()*0.46)*H,cx=(0.22+rng()*0.56)*W,cy=(0.2+rng()*0.6)*H;
+    if(!BLEED&&rng()<0.45){                                 // выворотка: чистый логотип бумагой сквозь краску
+      drawGlyph(KCTX,L,cx,cy,hh,'rgba(247,244,237,0.97)',1);drawn++;return;}
+    const reg=(3+rng()*9)*S,
+      plates=[['rgba(0,150,195,1)',-reg,reg*0.4],['rgba(214,0,134,1)',reg,-reg*0.3],[INK(1),0,0]];
+    x.globalCompositeOperation='multiply';
+    for(const[col,dx,dy]of plates)drawGlyph(x,L,cx+dx,cy+dy,hh,col,0.92);
+    x.globalCompositeOperation='destination-out';          // износ краски — крапины внутри логотипа
+    for(let k=0,nn=hh*0.4;k<nn;k++){x.beginPath();
+      x.arc(cx+(rng()-0.5)*hh*0.55,cy+(rng()-0.5)*hh,0.5+rng()*2.2,0,7);x.fill();}
+    x.globalCompositeOperation='source-over';drawn++;}
+  function logoRow(){const L=CFG.logo;if(!L)return;            // ряд мелких логотипов — сериальность
+    const hh=(0.05+rng()*0.05)*H,n=4+((rng()*7)|0),y2=(0.1+rng()*0.8)*H,step=W/(n+1);
+    for(let k=1;k<=n;k++){const col=rng()<0.3?RED(0.8):INK(0.85);
+      drawGlyph(x,L,k*step,y2,hh,col.includes('186')?'rgb(186,24,38)':'rgb(16,13,17)',0.85);}
+    drawn++;}
   function proofStamp(){const txts=['PROOF','SPECIMEN','NOT FOR RESALE','FILE COPY','VOID'],
     txt=txts[(rng()*txts.length)|0],fs=(20+rng()*22)*S;
     x.save();x.translate((0.3+rng()*0.4)*W,(0.3+rng()*0.4)*H);
@@ -482,6 +512,9 @@ function pressLayer(i){
   if(rng()<0.5)cropMarks();
   if(rng()<0.35)cmykBar();
   if(rng()<0.25)proofStamp();
+  const lb=CFG.logoBias||0;                                  // серии с логотипом (vitalik/ETH) — больше графики
+  if(rng()<lb)logoPlate();if(rng()<lb*0.4)logoPlate();
+  if(rng()<lb*0.7)logoRow();
   if(rng()<0.55)redMarks();if(rng()<0.2)redMarks();
   if(!drawn)headline();
   return PCV;
