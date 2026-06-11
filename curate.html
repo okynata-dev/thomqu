@@ -27,8 +27,8 @@
 <div id="nav"></div>
 <div id="grid"></div>
 <script src="master-data.js"></script>
-<script src="engine.js?v=3"></script>
-<script src="series.js?v=3"></script>
+<script src="engine.js?v=4"></script>
+<script src="series.js?v=4"></script>
 <script>
 "use strict";
 // Кураторская: клик по тайлу = keep/нет (зелёная рамка), выбор живёт в localStorage,
@@ -62,7 +62,7 @@ function pump(){
 function save(){localStorage.setItem(LSKEY,JSON.stringify([...KEEP].sort((a,b)=>a-b)));cnt();}
 function cnt(){document.getElementById('kept').textContent=KEEP.size;}
 function nav(){
-  const names={huang:'HUANG/NVDA',saylor:'SAYLOR/MSTR',vitalik:'BUTERIN/ETH',powell:'POWELL/FED'};
+  const names={huang:'HUANG/NVDA',saylor:'SAYLOR/MSTR',vitalik:'BUTERIN/ETH',powell:'POWELL/FED',gates:'GATES/MSFT',zuck:'ZUCK/META'};
   document.getElementById('nav').innerHTML=
     Object.keys(names).map(s=>'<a class="'+(s===SER?'on':'')+'" href="curate.html?s='+s+'">'+names[s]+'</a>').join(' · ')
     +'<span class="r">kept: <b id="kept">0</b>/'+COUNT

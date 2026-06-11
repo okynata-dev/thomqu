@@ -12,6 +12,8 @@ API = 'https://api.openverse.org/v1/images/'
 
 QUERIES = {
     'vitalik': ['vitalik buterin', 'buterin ethereum', 'vitalik buterin devcon', 'vitalik buterin conference'],
+    'gates':   ['bill gates', 'bill gates microsoft', 'bill gates speaking', 'bill gates portrait'],
+    'zuck':    ['mark zuckerberg', 'mark zuckerberg facebook', 'zuckerberg speaking', 'zuckerberg meta'],
 }
 BAD = re.compile(r'(logo|chart|diagram|screenshot|coin|token|render|poster|cover|3d)', re.I)
 

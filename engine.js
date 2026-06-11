@@ -453,7 +453,7 @@ function pressLayer(i){
     g.textAlign='center';g.textBaseline='middle';g.globalAlpha=a;g.fillStyle=col;
     g.fillText(L.text,0,0);g.restore();g.globalAlpha=1;}
   function logoPlate(){const L=CFG.logo;if(!L)return;
-    const hh=(0.34+rng()*0.46)*H,cx=(0.22+rng()*0.56)*W,cy=(0.2+rng()*0.6)*H;
+    const hh=(0.18+rng()*0.24)*H,cx=(0.22+rng()*0.56)*W,cy=(0.2+rng()*0.6)*H;
     if(!BLEED&&rng()<0.45){                                 // выворотка: чистый логотип бумагой сквозь краску
       drawGlyph(KCTX,L,cx,cy,hh,'rgba(247,244,237,0.97)',1);drawn++;return;}
     const reg=(3+rng()*9)*S,
