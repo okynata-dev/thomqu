@@ -62,7 +62,7 @@ function pump(){
 function save(){localStorage.setItem(LSKEY,JSON.stringify([...KEEP].sort((a,b)=>a-b)));cnt();}
 function cnt(){document.getElementById('kept').textContent=KEEP.size;}
 function nav(){
-  const names={huang:'HUANG/NVDA',saylor:'SAYLOR/MSTR',vitalik:'BUTERIN/ETH'};
+  const names={huang:'HUANG/NVDA',saylor:'SAYLOR/MSTR',vitalik:'BUTERIN/ETH',powell:'POWELL/FED'};
   document.getElementById('nav').innerHTML=
     Object.keys(names).map(s=>'<a class="'+(s===SER?'on':'')+'" href="curate.html?s='+s+'">'+names[s]+'</a>').join(' · ')
     +'<span class="r">kept: <b id="kept">0</b>/'+COUNT

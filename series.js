@@ -62,6 +62,56 @@ saylor:{
    'CONVERTS COME DUE'],
   ticks:['MSTR 120.44 ▼ −57% YOY','BTC HELD 845,256 · AVG $75,681','MNAV 0.9× · DISCOUNT TO COIN',
    '52W 104.17–457.20','CONVERTS $7.3B · COUPON 0.625%','OPT FLOW ▼ PUTS 81% · IV 140']}},
+powell:{
+ name:'Jerome Powell',ticker:'FED',low:6.55,high:8.97,ath:'8.97T',copy:'LEGAL TENDER',
+ bubbleRow:['THE EVERYTHING BUBBLE','20__','2022'],
+ heads:{
+  hot:['THE PRINTER HUMS','WHATEVER IT TAKES, AGAIN','QE TO INFINITY','MONEY IS FREE. EVERYTHING IS A BUY',
+   'THE FED PUT LIVES','LIQUIDITY FOR ALL','ZERO FOR LONGER','THE BALANCE SHEET DOUBLES',
+   'ASSET PRICES ARE THE ECONOMY','BUY EVERYTHING, THE FED HAS YOUR BACK'],
+  mid:['TRANSITORY','DATA DEPENDENT','SOFT LANDING, MAYBE','THE DOT PLOT SHRUGS','HIGHER FOR LONGER',
+   'TWO MORE MEETINGS','WHAT IS NEUTRAL, ANYWAY?','THE LAST HIKE? THE FIRST CUT?',
+   'PRICE STABILITY, EVENTUALLY','EIGHT MEETINGS A YEAR'],
+  cold:['THE PRINTER COOLS','QT GRINDS ON','THE PUNCHBOWL IS GONE','LIQUIDITY LEAVES QUIETLY',
+   'RESERVES RUN THIN','THE FED PUT IS DEAD','NO ONE BIDS THE LONG END','BALANCE SHEET ON A DIET',
+   'HAWKS ALL THE WAY DOWN','AMPLE, FOR NOW']},
+ ticks:{
+  hot:['B/S $8.97T ▲ +112% SINCE 2020','FFR 0.00–0.25 · REAL YIELDS NEGATIVE','QE $120B/MO · RRP $0',
+   '10Y 0.62% · VIX 12 · EVERYTHING ▲','REPO CALM · SPREADS CRUSHED'],
+  mid:['FED · B/S BAND 6.55–8.97T (FROZEN)','FFR 3.75% · DOTS SCATTER','H.4.1 · WEDNESDAYS 16:30 ET',
+   'CPI 2.6% · CORE 2.9% · PCE 2.4%','FOMC ×8/YR · MINUTES +3W'],
+  cold:['B/S $6.71T ▼ · QT CONTINUES','LIQUIDITY −$2.3T OFF PEAK','RRP $6B · RESERVES "AMPLE?"',
+   '10Y 4.21% · TERM PREMIUM RETURNS','TGA REFILL DRAINS $300B','BANK TERM FUNDING: CLOSED']},
+ stamps:{
+  hot:['$9T','0.00%','∞','+112%'],
+  mid:['6.71T','3.75%','DOTS','?','×8'],
+  cold:['QT','▼','−$2.3T','AMPLE?']},
+ quotes:{
+  hot:['“not even thinking about thinking about raising rates”','“inflation is transitory”',
+   '“we have the tools”','“whatever it takes”'],
+  mid:['“data dependent”','“policy is in a good place”','“neutral is a concept, not a number”'],
+  cold:['“some pain ahead”','“higher for longer”','“the disinflationary process has begun” — again',
+   '“no one rings a bell at the bottom of liquidity”']},
+ pageidx:{
+  hot:'MARKETS B1 · RATES C1 · OPINION A19 · MANSIONS D4',
+  mid:'MARKETS B1 · RATES C1 · OPINION A19 · OBITUARIES D7',
+  cold:'MARKETS B1 · RATES C1 · BANK FAILURES D2 · OBITUARIES D7'},
+ corpus:{
+  hot:'The printer hums in the basement of everything. Money costs nothing and therefore everything costs anything; '
+   +'cap rates compress, junk yields vanish, a jpeg clears at the price of a house. The committee buys bonds the way '
+   +'weather happens — vast, impersonal, weekly. Skeptics talk about consequences; the tape talks louder. Liquidity '
+   +'is a tide that believes itself to be a sea.',
+  mid:'Eight meetings a year, a scatter of dots, a podium and a thousand readings of the word patient. Policy works '
+   +'with long and variable lags, which is to say nobody knows; the chair says data dependent and the market hears '
+   +'whatever it brought into the room. Somewhere between transitory and entrenched, between soft landing and the '
+   +'other kind, the balance sheet breathes.',
+  cold:'Liquidity leaves the way it came, only quieter. Every Wednesday at four-thirty the sheet is a little thinner, '
+   +'a few billion of belief allowed to mature and die unreplaced. Reserves are ample until the morning a repo desk '
+   +'says otherwise. The punchbowl is gone and the party guests are checking coat-room tickets for collateral. The '
+   +'printer is not off. It is listening.'},
+ sect:[['10Y',4.2],['2Y',3.8],['DXY',103],['SPX',6800],['GOLD',3300],['OIL',71]],
+ earn:[['B/S',6.71,0.05,'T'],['TSY',4.47,0.05,'T'],['MBS',1.97,0.02,'T'],
+       ['FFR',3.75,0.25,'%'],['RRP',6,4,'B'],['TGA',876,40,'B']]},
 vitalik:{
  name:'Vitalik Buterin',ticker:'ETH',low:1388.12,high:4955.90,ath:'4,955.90',copy:'GAS 12 GWEI',
  bubbleRow:['THE WORLD COMPUTER','20__','2026'],

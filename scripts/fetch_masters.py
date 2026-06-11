@@ -16,6 +16,7 @@ PERSONS = [
     {'slug': 'huang',   'name': 'Jensen Huang',    'ticker': 'NVDA', 'cat': 'Category:Jensen Huang',     'q': 'Jensen Huang'},
     {'slug': 'saylor',  'name': 'Michael Saylor',  'ticker': 'MSTR', 'cat': 'Category:Michael J. Saylor','q': 'Michael Saylor'},
     {'slug': 'vitalik', 'name': 'Vitalik Buterin', 'ticker': 'ETH',  'cat': 'Category:Vitalik Buterin',  'q': 'Vitalik Buterin'},
+    {'slug': 'powell',  'name': 'Jerome Powell',   'ticker': 'FED',  'cat': 'Category:Jerome Powell',    'q': 'Jerome Powell federal reserve'},
 ]
 
 OK = re.compile(r'^(cc0|cc.by(.\d\.\d)?|public domain|pd|no restrictions|attribution)', re.I)   # разрешительные

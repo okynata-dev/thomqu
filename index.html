@@ -56,9 +56,8 @@
 <body>
 
 <div id="hero">
-  <div class="top"><span>THOMQU PRESS</span><span>SERIES ONE — SAYLOR / MSTR</span></div>
-  <div class="ttl"><canvas id="t-hero"></canvas></div>
-  <div class="sub">128 WORKS · LIMITED EDITION · MINT TBA</div>
+  <div class="top"><span></span><span>SERIES ONE — SAYLOR / MSTR</span></div>
+  <a class="ttl" href="generate.html?s=saylor"><canvas id="t-hero"></canvas></a>
 </div>
 
 <main>
@@ -84,13 +83,9 @@
     <div class="quote">“There is no second best.”<small>— THE CHAIRMAN, EVERY DAY</small></div>
   </section>
 
-  <div id="works">
-    <div class="grid" id="wgrid"></div>
-    <div class="ctarow"><a class="cta" href="generate.html?s=saylor">VIEW THE PRESS RUN — ALL 128 WORKS</a></div>
-  </div>
-
   <div class="foot">
-    PORTRAITS: WIKIMEDIA COMMONS, PD/CC — <a href="assets/saylor/credits.json">FULL CREDITS</a>
+    <a href="generate.html?s=saylor">PRESS RUN — 128</a>
+    &nbsp;·&nbsp; PORTRAITS: WIKIMEDIA COMMONS, PD/CC — <a href="assets/saylor/credits.json">FULL CREDITS</a>
     &nbsp;·&nbsp; NEXT IN THE PRESS: HUANG/NVDA · BUTERIN/ETH · POWELL/FED
     &nbsp;·&nbsp; THOMQU.COM · JUNE 2026
   </div>
@@ -126,7 +121,6 @@ knockTitle(document.getElementById('t-hero'),'SAYLOR');
 
 // ---- работы: полная сила, без прозрачности ----
 const HERO_TOKEN=12;                                       // его же тиражный фаворит
-const WALL=[1,18,31,3,107,277];                            // контактный лист (из кураторских кипов)
 let MASTERS=[window.MASTER_SRC];
 const ICACHE={};
 const midx=i=>hashStr('master-'+SER+'-'+i)%MASTERS.length;
@@ -150,11 +144,6 @@ function renderToken(n1,wpx,hpx){
   job(async()=>{                                           // герой: одна работа во весь экран
     const t=await renderToken(HERO_TOKEN,1200,1600);if(!t)return;
     t.className='art';document.getElementById('hero').prepend(t);});
-  const grid=document.getElementById('wgrid');
-  for(const n1 of WALL)
-    job(async()=>{const t=await renderToken(n1,720,960);if(!t)return;
-      const a=document.createElement('a');a.href='token.html?n='+n1+'&s='+SER;a.appendChild(t);
-      grid.appendChild(a);});
 })();
 </script>
 </body>
