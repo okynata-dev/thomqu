@@ -53,7 +53,7 @@ function render(){
   const wrap=document.getElementById('wrap');wrap.innerHTML='';wrap.appendChild(cv);
   const cap=document.getElementById('cap');
   const[rg,cls]=regime(TEMP);
-  cap.innerHTML='<a href="#" id="pv">‹</a> #'+N+'/'+COUNT+' · '+Wt+'×'+H+' <a href="#" id="nx">›</a> · <a href="#" id="sv">save</a> · <a href="anim.html?n='+N+'&t='+TEMP.toFixed(3)+'&s='+SER+'">▶ anim</a>'
+  cap.innerHTML='<a href="#" id="pv">‹</a> #'+N+'/'+COUNT+' · '+Wt+'×'+H+' <a href="#" id="nx">›</a> · <a href="#" id="sv">save</a>'
     +' · t <input id="tr" type="range" min="0" max="1" step="0.01" value="'+TEMP+'"> <b id="tv" class="'+cls+'">'+TEMP.toFixed(2)+' '+rg+'</b>';
   document.getElementById('pv').onclick=e=>{e.preventDefault();go(N-2);};
   document.getElementById('nx').onclick=e=>{e.preventDefault();go(N);};

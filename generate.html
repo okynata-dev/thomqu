@@ -13,10 +13,14 @@
   #nav a.on{color:#000;font-weight:700;}
   #nav .r{float:right;}
   #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px;}
-  #grid .cell{position:relative;}
-  #grid canvas{display:block;width:100%;aspect-ratio:3/4;height:auto;background:#f4f0e8;cursor:pointer;transition:opacity .12s;}
+  /* cell holds a STABLE box (aspect-ratio) so page height/scroll stay fixed even when the
+     canvas inside is destroyed off-screen — this is what keeps IntersectionObserver honest. */
+  #grid .cell{position:relative;aspect-ratio:3/4;background:#f4f0e8;}
+  #grid canvas{display:block;width:100%;height:100%;cursor:pointer;transition:opacity .12s;}
   #grid canvas:hover{opacity:.85;}
   #grid span{position:absolute;left:8px;bottom:6px;color:rgba(0,0,0,0.35);font:11px ui-monospace,Menlo,monospace;pointer-events:none;}
+  /* mobile: fewer columns => fewer simultaneous canvases; legible tiles on a phone. */
+  @media(max-width:700px){#grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;}}
 </style>
 </head>
 <body>
@@ -27,7 +31,13 @@
 <script src="series.js"></script>
 <script>
 "use strict";
-const RW=720,RH=960;                   // tile render res (далёкие тайлы освобождаются из памяти)
+// Device-adaptive budget. Mobile Safari has a hard ceiling on total canvas backing-store memory
+// (~256–384MB) and blanks the page when exceeded. We render at lower res, prefetch a shorter
+// distance, and hard-cap the number of live canvases so we never approach that ceiling.
+const MOBILE=matchMedia('(max-width:700px)').matches||/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const RW=MOBILE?480:720, RH=MOBILE?640:960;            // tile render res
+const MARGIN=MOBILE?'400px 0px':'1400px 0px';          // IntersectionObserver prefetch distance
+const MAXLIVE=MOBILE?18:160;                           // hard cap on simultaneously-materialized canvases
 const Q=new URLSearchParams(location.search);
 const TEMP=Math.max(0,Math.min(1,parseFloat(Q.get('t')||'0.5')||0.5));
 const SER=(Q.get('s')||'huang').replace(/[^a-z]/g,'');          // серия: huang | saylor | vitalik
@@ -40,39 +50,75 @@ const midx=i=>hashStr('master-'+SER+'-'+i)%MASTERS.length;      // фото то
 const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=MASTERS[mi];}));
 
 let TOKENS=[];                         // список id токенов (вся серия или кураторский набор из манифеста)
-const cvs={},done={},queue=[];let busy=false;
-function enqueue(i){if(!done[i]&&queue.indexOf(i)<0){queue.push(i);pump();}}
-function release(i){const cv=cvs[i];if(cv&&done[i]){cv.width=1;cv.height=1;done[i]=false;}}
+const cells={};                        // i -> постоянный <div> (дёшево, живёт всегда)
+const cvs={};                          // i -> <canvas> ТОЛЬКО пока тайл материализован
+const done={};                         // i -> отрисован
+const live=[];                         // порядок материализации (LRU для капа)
+const visible=new Set();               // что сейчас в зоне видимости (нельзя выселять)
+const queue=[];let busy=false;
+
+function enqueue(i){if(cvs[i]&&!done[i]&&queue.indexOf(i)<0){queue.push(i);pump();}}
+
+// создать canvas и поставить в очередь рендера — только когда тайл в зоне
+function materialize(i){
+  if(cvs[i])return;
+  const cv=document.createElement('canvas');cv.dataset.i=i;
+  cv.addEventListener('click',()=>window.open('token.html?n='+(i+1)+'&t='+TEMP.toFixed(3)+'&s='+SER,'_blank'));
+  cells[i].appendChild(cv);
+  cvs[i]=cv;live.push(i);
+  enforceCap();
+  enqueue(i);
+}
+
+// полностью уничтожить canvas — освобождаем backing store И удаляем DOM-узел
+function dematerialize(i){
+  const cv=cvs[i];if(!cv)return;
+  cv.width=cv.height=0;                 // сразу сбрасываем буфер
+  cv.remove();                          // и сам элемент
+  delete cvs[i];delete done[i];
+  const k=live.indexOf(i);if(k>=0)live.splice(k,1);
+  const qk=queue.indexOf(i);if(qk>=0)queue.splice(qk,1);
+}
+
+// backstop: если живых canvas больше капа — выселяем самые старые, КРОМЕ видимых сейчас
+function enforceCap(){
+  for(let k=0;live.length>MAXLIVE&&k<live.length;){
+    const i=live[k];
+    if(visible.has(i)){k++;continue;}
+    dematerialize(i);                   // splice сдвигает live, индекс k не трогаем
+  }
+}
+
 function pump(){
   if(busy||!queue.length)return;busy=true;
   const i=queue.shift();
-  if(done[i]){busy=false;pump();return;}
+  if(!cvs[i]||done[i]){busy=false;pump();return;}
   getImg(midx(i)).then(im=>setTimeout(()=>{
-    if(im){ENGINE.fitMaster(im);const cv=cvs[i];cv.width=RW;cv.height=RH;
+    const cv=cvs[i];                    // мог быть уничтожен пока грузилось фото
+    if(cv&&im){ENGINE.fitMaster(im);cv.width=RW;cv.height=RH;
       cv.getContext('2d').putImageData(new ImageData(ENGINE.compose(i),RW,RH),0,0);done[i]=true;}
     busy=false;pump();},0));
 }
+
 function nav(){
   const names={huang:'HUANG/NVDA',saylor:'SAYLOR/MSTR',vitalik:'BUTERIN/ETH'};
   document.getElementById('nav').innerHTML=
     Object.keys(names).map(s=>'<a class="'+(s===SER?'on':'')+'" href="generate.html?s='+s+'">'+names[s]+'</a>').join(' · ')
-    +'<span class="r">'+TOKENS.length+' works · <a href="anim10.html?s='+SER+'">live ×10</a> · <a href="curate.html?s='+SER+'">curate</a></span>';
+    +'<span class="r">'+TOKENS.length+' works · <a href="curate.html?s='+SER+'">curate</a></span>';
 }
 function build(){
   const grid=document.getElementById('grid');
   for(const i of TOKENS){
-    const cell=document.createElement('div');cell.className='cell';
-    const cv=document.createElement('canvas');cv.dataset.i=i;
-    cv.addEventListener('click',()=>window.open('token.html?n='+(i+1)+'&t='+TEMP.toFixed(3)+'&s='+SER,'_blank'));
+    const cell=document.createElement('div');cell.className='cell';cell.dataset.i=i;
     const lab=document.createElement('span');lab.textContent='#'+(i+1);
-    cell.appendChild(cv);cell.appendChild(lab);grid.appendChild(cell);cvs[i]=cv;
+    cell.appendChild(lab);grid.appendChild(cell);cells[i]=cell;
   }
   const io=new IntersectionObserver(es=>{
     for(const e of es){const i=+e.target.dataset.i;
-      if(e.isIntersecting)enqueue(i);else release(i);}   // вне зоны — освобождаем буфер
-  },{rootMargin:'1400px 0px'});
-  TOKENS.forEach(i=>io.observe(cvs[i]));
-  for(let k=0;k<6&&k<TOKENS.length;k++)enqueue(TOKENS[k]);
+      if(e.isIntersecting){visible.add(i);materialize(i);}    // в зоне — создаём и рендерим
+      else{visible.delete(i);dematerialize(i);}}              // ушёл из зоны — уничтожаем
+  },{rootMargin:MARGIN});
+  TOKENS.forEach(i=>io.observe(cells[i]));                    // наблюдаем за стабильными div, не за canvas
 }
 (async()=>{
   let man=null;
