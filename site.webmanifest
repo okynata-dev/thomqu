@@ -1,0 +1,13 @@
+{
+  "name": "THOMQU PRESS",
+  "short_name": "THOMQU",
+  "description": "Silkscreen portraits wired to a ticker.",
+  "icons": [
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ],
+  "theme_color": "#15120f",
+  "background_color": "#f4f0e8",
+  "display": "standalone",
+  "start_url": "/"
+}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /curate
+Sitemap: https://thomqu.com/sitemap.xml

@@ -3,7 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>thomqu — series</title>
+<title>The Press Run — THOMQU</title>
+<meta name="description" content="Browse the full press run — generative silkscreen portraits wired to a ticker.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#15120f">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="THOMQU PRESS">
+<meta property="og:title" content="The Press Run — THOMQU">
+<meta property="og:description" content="Generative silkscreen portraits wired to a ticker.">
+<meta property="og:image" content="https://thomqu.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@thomqu">
+<meta name="twitter:image" content="https://thomqu.com/og.png">
 <style>
   html,body{margin:0;background:#fff;}
   #nav{position:sticky;top:0;background:rgba(255,255,255,0.94);z-index:5;padding:10px 16px;
@@ -124,7 +139,7 @@ function build(){
 (async()=>{
   let man=null;
   try{man=await(await fetch('assets/'+SER+'/manifest.json')).json();}catch(e){}
-  if(man&&man.masters&&man.masters.length){MASTERS=man.masters.map(f=>'assets/'+SER+'/'+f);document.title=man.name+' — '+COUNT;}
+  if(man&&man.masters&&man.masters.length){MASTERS=man.masters.map(f=>'assets/'+SER+'/'+f);document.title=(man.name||'The Press Run')+' — THOMQU';}
   TOKENS=(man&&man.curated&&man.curated.length&&!Q.get('all'))
     ? man.curated.map(n=>n-1)                            // кураторский набор (1-based в манифесте)
     : Array.from({length:COUNT},(_,i)=>i);

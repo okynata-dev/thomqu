@@ -3,7 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HUANG — token</title>
+<title>Token — THOMQU</title>
+<meta name="description" content="A single silkscreen press run, 4K, with live price temperature.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#15120f">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="THOMQU PRESS">
+<meta property="og:image" content="https://thomqu.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@thomqu">
+<meta name="twitter:image" content="https://thomqu.com/og.png">
 <style>
   html,body{margin:0;height:100%;background:#fff;}
   #wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;}
@@ -47,6 +59,7 @@ const go=n=>location.href='token.html?n='+((n+COUNT-1)%COUNT+1)+'&res='+LONG+'&t
 const regime=t=>t>0.62?['OVERHEATED','hot']:t<0.38?['BURNOUT','cold']:['CLEAN','neutral'];
 
 function render(){
+  document.title=SER.charAt(0).toUpperCase()+SER.slice(1)+' #'+N+' — THOMQU';
   const work=ENGINE.compose(N-1);
   const cv=document.createElement('canvas');cv.width=Wt;cv.height=H;
   cv.getContext('2d').putImageData(new ImageData(work,Wt,H),0,0);
