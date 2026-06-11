@@ -41,17 +41,33 @@ const cT=t=>{const v=(t-0.5)*1.7+0.5;return v<0?0:v>1?1:v;};
 const lumAt=(x,y)=>cT(samp(L,x,y)/255);
 function cmykAt(x,y,ch){const r=cT(samp(R,x,y)/255),g=cT(samp(G,x,y)/255),b=cT(samp(B,x,y)/255),k=1-Math.max(r,g,b);if(k>=0.999)return ch===3?1:0;if(ch===3)return k;return[(1-r-k)/(1-k),(1-g-k)/(1-k),(1-b-k)/(1-k)][ch];}
 
+// Плоская постеризация (screenprint) вместо халфтонных точек — по фидбеку «кружочки некрасивы у всех».
+// L → флаговые тональные зоны → плоский цвет палитры (как Warhol Screenprint, любимый финиш). Без точек.
+const TH5=[0.16,0.40,0.62,0.82], TH4=[0.22,0.50,0.76], TH3=[0.34,0.68];
+function poster(pal,th){return ctx=>ctx.putImageData(pixel(l=>{const v=l/255;let z=0;while(z<th.length&&v>=th[z])z++;return pal[z];}),0,0);}
+const ELEC5=[[10,14,26],[22,60,235],[0,205,180],[228,255,40],[243,247,224]];
+const ASH4=[[20,22,27],[60,72,82],[150,164,172],[238,236,228]];
+const TEAL5=[[10,20,19],[13,92,99],[242,92,5],[255,200,150],[255,247,232]];
+const BLOOD5=[[22,8,8],[166,12,30],[255,92,31],[255,205,63],[255,240,216]];
+const PURP5=[[18,10,26],[78,20,132],[182,40,255],[200,255,46],[244,240,232]];
+const GOLD5=[[20,15,8],[92,56,12],[206,124,22],[247,202,44],[255,244,212]];
+const REDBLK3=[[18,15,20],[182,12,30],[244,239,228]];
+const NAVY3=[[12,18,36],[36,78,150],[238,234,222]];
+function posterMisprint(pal,th){const base=poster(pal,th);return ctx=>{base(ctx);          // плоский + сдвиг каналов = риз-непопадание, без точек
+  const g=ctx.getImageData(0,0,W,H),d=g.data,o=d.slice(),sh=Math.max(1,(3*SCALE)|0);
+  for(let y=0,p=0;y<H;y++)for(let x=0;x<W;x++,p+=4){const xr=x+sh<W?x+sh:W-1,xb=x-sh>0?x-sh:0;
+    d[p]=o[(y*W+xr)*4];d[p+2]=o[(y*W+xb)*4+2];}ctx.putImageData(g,0,0);};}
 const FINISH=[
-  ["CMYK Halftone", ctx=>dots(ctx,'#f4efe4',[{col:[0,158,200],ang:15,ink:(x,y)=>cmykAt(x,y,0)},{col:[222,0,140],ang:75,ink:(x,y)=>cmykAt(x,y,1)},{col:[245,206,0],ang:0,ink:(x,y)=>cmykAt(x,y,2)},{col:[18,15,18],ang:45,ink:(x,y)=>cmykAt(x,y,3)}],5)],
-  ["Newsprint", ctx=>dots(ctx,'#f0e7d2',[{col:[22,20,18],ang:45,ink:(x,y)=>Math.pow(1-lumAt(x,y),1.05)}],6)],
-  ["Duotone Ink", ctx=>dots(ctx,'#efeae0',[{col:[20,40,55],ang:45,ink:(x,y)=>Math.pow(1-lumAt(x,y),1.3)},{col:[0,150,150],ang:15,ink:(x,y)=>{const l=lumAt(x,y);return Math.max(0,1-Math.abs(l-0.5)*2.6);}}],5)],
+  ["Poster Electric", poster(ELEC5,TH5)],
+  ["Poster Ash",      poster(ASH4,TH4)],
+  ["Poster Teal",     poster(TEAL5,TH5)],
   ["Warhol Screenprint", ctx=>{const pal=[[20,16,22],[224,33,138],[255,106,26],[255,210,30],[255,243,214]];ctx.putImageData(pixel(l=>{const L0=l/255;let z=L0<0.15?0:L0<0.38?1:L0<0.62?2:L0<0.82?3:4;return pal[z];}),0,0);}],
-  ["Riso 2-Color", ctx=>{dots(ctx,'#f7f2e7',[{col:[0,120,190],ang:45,ox:1.5,oy:0,ink:(x,y)=>Math.pow(1-lumAt(x,y),1.4)},{col:[255,72,176],ang:15,ox:-1.5,oy:1,ink:(x,y)=>{const l=lumAt(x,y);return Math.max(0,0.9-Math.abs(l-0.55)*2.2);}}],5);const g=ctx.getImageData(0,0,W,H),d=g.data;for(let y=0,p=0;y<H;y++)for(let x=0;x<W;x++,p+=4){const n=(h2(x/SCALE,y/SCALE)-0.5)*22;d[p]=clamp(d[p]+n);d[p+1]=clamp(d[p+1]+n);d[p+2]=clamp(d[p+2]+n);}ctx.putImageData(g,0,0);}],
-  ["Riso 3-Color", ctx=>dots(ctx,'#f8f3e8',[{col:[255,210,30],ang:0,ox:1,oy:-1,ink:(x,y)=>Math.max(0,(lumAt(x,y)-0.45)*1.6)},{col:[255,72,176],ang:15,ox:-2,oy:1,ink:(x,y)=>{const l=lumAt(x,y);return Math.max(0,0.85-Math.abs(l-0.5)*2.3);}},{col:[0,110,185],ang:45,ox:2,oy:1.5,ink:(x,y)=>Math.pow(1-lumAt(x,y),1.5)}],5)],
+  ["Poster Blood",    poster(BLOOD5,TH5)],
+  ["Poster Purple",   poster(PURP5,TH5)],
   ["1-bit Stamp", ctx=>ctx.putImageData(pixel((l,r,g,b,x,y)=>{const rough=(h2(x/SCALE*1.7,y/SCALE*1.7)-0.5)*0.12,t=(l/255)+rough;const dens=0.75+0.25*blotch(x/SCALE,y/SCALE,40);if(t<0.46){const v=clamp(30*(1.2-dens));return[v+10,v+8,v+8];}return[244,240,230];}),0,0)],
-  ["Bayer Dither", ctx=>{const m=[[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];ctx.putImageData(pixel((l,r,g,b,x,y)=>{const fx=Math.floor(x/SCALE)&3,fy=Math.floor(y/SCALE)&3;const th=(m[fy][fx]+0.5)/16*255;return(l>th)?[245,241,231]:[24,20,22];}),0,0);}],
-  ["Floyd–Steinberg", ctx=>{const dw=Math.round(W/SCALE),dh=Math.round(H/SCALE);const buf=new Float32Array(dw*dh);for(let y=0;y<dh;y++)for(let x=0;x<dw;x++)buf[y*dw+x]=samp(L,x*SCALE,y*SCALE);for(let y=0;y<dh;y++)for(let x=0;x<dw;x++){const i=y*dw+x;const old=buf[i];const nw=old<128?0:255;const err=old-nw;buf[i]=nw;if(x+1<dw)buf[i+1]+=err*7/16;if(y+1<dh){if(x>0)buf[i+dw-1]+=err*3/16;buf[i+dw]+=err*5/16;if(x+1<dw)buf[i+dw+1]+=err*1/16;}}const out=new ImageData(W,H),d=out.data;for(let y=0,p=0;y<H;y++)for(let x=0;x<W;x++,p+=4){const v=buf[(Math.floor(y/SCALE))*dw+Math.floor(x/SCALE)]<128?[26,22,24]:[246,242,232];d[p]=v[0];d[p+1]=v[1];d[p+2]=v[2];d[p+3]=255;}ctx.putImageData(out,0,0);}],
-  ["Riso Misregister", ctx=>dots(ctx,'#f7f2e7',[{col:[20,30,40],ang:45,ink:(x,y)=>Math.pow(1-lumAt(x,y),1.3)},{col:[255,72,176],ang:15,ox:-7,oy:3,ink:(x,y)=>{const l=lumAt(x,y);return Math.max(0,0.9-Math.abs(l-0.5)*2.2);}},{col:[0,150,170],ang:75,ox:7,oy:-3,ink:(x,y)=>Math.max(0,(lumAt(x,y)-0.4)*1.4)}],5)],
+  ["Poster Red/Black", poster(REDBLK3,TH3)],
+  ["Poster Navy",     poster(NAVY3,TH3)],
+  ["Poster Misprint", posterMisprint(GOLD5,TH5)],
 ];
 
 const bidx=(x,y)=>(y*W+x)*3;
