@@ -34,8 +34,12 @@ function dots(ctx,paper,screens,pitch){pitch*=SCALE;ctx.fillStyle=paper;ctx.fill
     ctx.fillStyle=`rgb(${s.col[0]},${s.col[1]},${s.col[2]})`;
     for(let i=-span;i<=span;i++)for(let j=-span;j<=span;j++){const Lx=W/2+(i*ca-j*sa)*p,Ly=H/2+(i*sa+j*ca)*p;if(Lx<-p||Ly<-p||Lx>W+p||Ly>H+p)continue;let ink=s.ink(Lx,Ly);if(ink<=0.015)continue;const rad=p*0.5*Math.sqrt(ink)*1.18;ctx.beginPath();ctx.arc(Lx+ox,Ly+oy,rad,0,7);ctx.fill();}}
   ctx.globalCompositeOperation='source-over';}
-const lumAt=(x,y)=>samp(L,x,y)/255;
-function cmykAt(x,y,ch){const r=samp(R,x,y)/255,g=samp(G,x,y)/255,b=samp(B,x,y)/255,k=1-Math.max(r,g,b);if(k>=0.999)return ch===3?1:0;if(ch===3)return k;return[(1-r-k)/(1-k),(1-g-k)/(1-k),(1-b-k)/(1-k)][ch];}
+// Контрастная кривая ТОЛЬКО для дотовых халфтонов: разводит полутона, чтобы лицо читалось
+// в CMYK/Duotone/Riso (малоконтрастные фото иначе тонут в равномерной каше точек).
+// Пиксельные финиши (1-bit/Bayer/Floyd/Warhol) берут L напрямую и НЕ затронуты.
+const cT=t=>{const v=(t-0.5)*1.7+0.5;return v<0?0:v>1?1:v;};
+const lumAt=(x,y)=>cT(samp(L,x,y)/255);
+function cmykAt(x,y,ch){const r=cT(samp(R,x,y)/255),g=cT(samp(G,x,y)/255),b=cT(samp(B,x,y)/255),k=1-Math.max(r,g,b);if(k>=0.999)return ch===3?1:0;if(ch===3)return k;return[(1-r-k)/(1-k),(1-g-k)/(1-k),(1-b-k)/(1-k)][ch];}
 
 const FINISH=[
   ["CMYK Halftone", ctx=>dots(ctx,'#f4efe4',[{col:[0,158,200],ang:15,ink:(x,y)=>cmykAt(x,y,0)},{col:[222,0,140],ang:75,ink:(x,y)=>cmykAt(x,y,1)},{col:[245,206,0],ang:0,ink:(x,y)=>cmykAt(x,y,2)},{col:[18,15,18],ang:45,ink:(x,y)=>cmykAt(x,y,3)}],5)],
