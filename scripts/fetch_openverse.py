@@ -14,6 +14,18 @@ QUERIES = {
     'vitalik': ['vitalik buterin', 'buterin ethereum', 'vitalik buterin devcon', 'vitalik buterin conference'],
     'gates':   ['bill gates', 'bill gates microsoft', 'bill gates speaking', 'bill gates portrait'],
     'zuck':    ['mark zuckerberg', 'mark zuckerberg facebook', 'zuckerberg speaking', 'zuckerberg meta'],
+    'cz':      ['changpeng zhao', 'cz binance', 'binance ceo'],
+    'trump':   ['donald trump portrait', 'donald trump speaking', 'trump rally'],
+    'musk':    ['elon musk', 'elon musk speaking', 'elon musk portrait', 'elon musk tesla'],
+    'sbf':     ['sam bankman-fried', 'ftx founder', 'bankman fried'],
+    'cathie':  ['cathie wood', 'cathie wood ark invest', 'catherine wood investor'],
+    'buffett': ['warren buffett', 'warren buffett berkshire', 'warren buffett portrait'],
+    'armstrong':['brian armstrong coinbase', 'coinbase ceo', 'brian armstrong'],
+    'dorsey':  ['jack dorsey', 'jack dorsey twitter', 'jack dorsey square'],
+    'dimon':   ['jamie dimon', 'jamie dimon jpmorgan', 'jamie dimon ceo'],
+    'dokwon':  ['do kwon', 'do kwon terra', 'terraform labs'],
+    'sun':     ['justin sun', 'justin sun tron', 'justin sun crypto'],
+    'ternus':  ['john ternus', 'john ternus apple', 'apple keynote ternus', 'john ternus wwdc'],
 }
 BAD = re.compile(r'(logo|chart|diagram|screenshot|coin|token|render|poster|cover|3d)', re.I)
 

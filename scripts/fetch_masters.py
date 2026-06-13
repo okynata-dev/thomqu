@@ -19,6 +19,18 @@ PERSONS = [
     {'slug': 'powell',  'name': 'Jerome Powell',   'ticker': 'FED',  'cat': 'Category:Jerome Powell',    'q': 'Jerome Powell federal reserve'},
     {'slug': 'gates',   'name': 'Bill Gates',      'ticker': 'MSFT', 'cat': 'Category:Bill Gates',       'q': 'Bill Gates'},
     {'slug': 'zuck',    'name': 'Mark Zuckerberg', 'ticker': 'META', 'cat': 'Category:Mark Zuckerberg',  'q': 'Mark Zuckerberg'},
+    {'slug': 'cz',      'name': 'Changpeng Zhao',  'ticker': 'BNB',  'cat': 'Category:Changpeng Zhao',   'q': 'Changpeng Zhao Binance'},
+    {'slug': 'trump',   'name': 'Donald Trump',    'ticker': 'TRUMP','cat': 'Category:Donald Trump 2024','q': 'Donald Trump portrait'},
+    {'slug': 'musk',    'name': 'Elon Musk',       'ticker': 'DOGE', 'cat': 'Category:Elon Musk',        'q': 'Elon Musk'},
+    {'slug': 'sbf',     'name': 'Sam Bankman-Fried','ticker':'FTT',  'cat': 'Category:Sam Bankman-Fried','q': 'Sam Bankman-Fried'},
+    {'slug': 'cathie',  'name': 'Cathie Wood',     'ticker': 'ARKK', 'cat': 'Category:Cathie Wood',      'q': 'Cathie Wood ARK'},
+    {'slug': 'buffett', 'name': 'Warren Buffett',  'ticker': 'BRK',  'cat': 'Category:Warren Buffett',   'q': 'Warren Buffett'},
+    {'slug': 'armstrong','name':'Brian Armstrong', 'ticker': 'COIN', 'cat': 'Category:Brian Armstrong (businessman)','q': 'Brian Armstrong Coinbase'},
+    {'slug': 'dorsey',  'name': 'Jack Dorsey',     'ticker': 'BTC',  'cat': 'Category:Jack Dorsey',      'q': 'Jack Dorsey'},
+    {'slug': 'dimon',   'name': 'Jamie Dimon',     'ticker': 'JPM',  'cat': 'Category:Jamie Dimon',      'q': 'Jamie Dimon'},
+    {'slug': 'dokwon',  'name': 'Do Kwon',         'ticker': 'LUNA', 'cat': 'Category:Do Kwon',          'q': 'Do Kwon Terra'},
+    {'slug': 'sun',     'name': 'Justin Sun',      'ticker': 'TRX',  'cat': 'Category:Justin Sun',       'q': 'Justin Sun Tron'},
+    {'slug': 'ternus',  'name': 'John Ternus',     'ticker': 'AAPL', 'cat': 'Category:John Ternus',      'q': 'John Ternus Apple'},
 ]
 
 OK = re.compile(r'^(cc0|cc.by(.\d\.\d)?|public domain|pd|no restrictions|attribution)', re.I)   # разрешительные
@@ -33,10 +45,12 @@ def api(params):
 def gather(person):
     titles = []
     cont = {}
-    while True:                                                   # файлы категории
+    pages = 0
+    while pages < 3:                                              # файлы категории (кап ~1500 для огромных, типа Трамп/Маск)
         r = api({'action':'query','list':'categorymembers','cmtitle':person['cat'],
                  'cmtype':'file','cmlimit':'500', **cont})
         titles += [m['title'] for m in r.get('query',{}).get('categorymembers',[])]
+        pages += 1
         if 'continue' in r: cont = {'cmcontinue': r['continue']['cmcontinue']}
         else: break
     cont = {}
@@ -83,7 +97,7 @@ def run(person, cap=120):
     rawdir = os.path.join(ROOT, 'assets', 'raw', slug)
     outdir = os.path.join(ROOT, 'assets', slug)
     os.makedirs(rawdir, exist_ok=True); os.makedirs(outdir, exist_ok=True)
-    infos = fileinfo(gather(person))
+    infos = fileinfo(gather(person)[:600])
     picked, credits = [], []
     for fi in infos:
         if len(picked) >= cap: break

@@ -1,0 +1,18 @@
+{
+ "slug": "trump",
+ "name": "Donald Trump",
+ "ticker": "TRUMP",
+ "masters": [
+  "001.jpg",
+  "003.jpg",
+  "006.jpg",
+  "009.jpg",
+  "010.jpg",
+  "011.jpg",
+  "012.jpg",
+  "013.jpg",
+  "016.jpg",
+  "017.jpg",
+  "021.jpg"
+ ]
+}
