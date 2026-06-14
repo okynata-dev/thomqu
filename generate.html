@@ -117,10 +117,11 @@ function pump(){
 
 function nav(){
   const names={huang:'HUANG/NVDA',saylor:'SAYLOR/MSTR',vitalik:'BUTERIN/ETH',powell:'POWELL/FED',gates:'GATES/MSFT',zuck:'ZUCK/META',cz:'CZ/BNB',trump:'TRUMP/$TRUMP',musk:'MUSK/DOGE',sbf:'SBF/FTT',cathie:'WOOD/ARKK',buffett:'BUFFETT/BRK',armstrong:'ARMSTRONG/COIN',dorsey:'DORSEY/BTC',dimon:'DIMON/JPM',dokwon:'KWON/LUNA',sun:'SUN/TRX',ternus:'TERNUS/AAPL'};
+  // публично показываем только текущую серию — остальные коллекции скрыты до их запуска
   document.getElementById('nav').innerHTML=
     '<a href="index.html" style="font-weight:700">THOMQU</a> &nbsp;·&nbsp; '
-    +Object.keys(names).map(s=>'<a class="'+(s===SER?'on':'')+'" href="generate.html?s='+s+'">'+names[s]+'</a>').join(' · ')
-    +'<span class="r">'+TOKENS.length+' works · <a href="curate.html?s='+SER+'">curate</a></span>';
+    +'<span class="on">'+(names[SER]||SER)+'</span>'
+    +'<span class="r">'+TOKENS.length+' works</span>';
 }
 function build(){
   const grid=document.getElementById('grid');

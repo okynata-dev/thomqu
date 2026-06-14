@@ -23,11 +23,7 @@ and a full-bleed knockout wordmark. Wide header (1500×500) + square (1080×1080
 <footer>avatar_mark — <a href="banners/avatar_mark.png" download style="color:var(--red)">download</a> · THOMQU.COM</footer>
 <script>
 const S=[
- ['saylor','SAYLOR / MSTR'],['huang','HUANG / NVDA'],['vitalik','BUTERIN / ETH'],['powell','POWELL / FED'],
- ['gates','GATES / MSFT'],['zuck','ZUCK / META'],['cz','CZ / BNB'],['trump','TRUMP / $TRUMP'],
- ['musk','MUSK / DOGE'],['sbf','SBF / FTT'],['cathie','WOOD / ARKK'],['buffett','BUFFETT / BRK'],
- ['armstrong','ARMSTRONG / COIN'],['dorsey','DORSEY / BTC'],['dimon','DIMON / JPM'],['dokwon','KWON / LUNA'],
- ['sun','SUN / TRX'],['ternus','TERNUS / AAPL']];
+ ['saylor','SAYLOR / MSTR']];   // только текущая серия в паблике; остальные скрыты до запуска
 const tile=(f)=>`<a class="b" href="banners/${f}.png" download><img loading="lazy" src="banners/${f}.png"><span>${f}</span></a>`;
 document.getElementById('kit').innerHTML=S.map(([s,name])=>
  `<h2>${name}</h2><div class="grid">${tile('banner_'+s)}${tile('square_'+s)}</div>`).join('');
