@@ -85,7 +85,7 @@ def main():
                 "name": f"{cfg['name'].split()[-1].upper()} / {cfg['ticker']} — No. {k}",
                 "description": DESC.format(name=cfg['name'], ticker=cfg['ticker'], edition=k, total=total),
                 "image": f"{base_img}/{k}.png",
-                "animation_url": f"{BASE_HOST}/live.html?s={slug}&id={k}",   # live price-temperature render
+                "animation_url": f"{BASE_HOST}/live?s={slug}&id={k}",   # live price-temperature render
                 "external_url": f"{BASE_HOST}/token.html?n={N}&s={slug}&t={args.temp:.2f}",
                 "attributes": traits(slug, cfg, k, total, N, args.temp, r['recipe'], r['master']),
             }
