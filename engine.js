@@ -199,6 +199,7 @@ function pickSeed(i){
       if(mushScore(r)===0&&strictOK(r)){seed=s2;break;}}}
   return SEEDCACHE[i]=seed;}
 
+let LASTRECIPE=null;                                  // recorded per compose() — for drop metadata traits (render-identical)
 function compose(i){
   CUR=i;
   buildChannels(i);                                  // press collage + temp grade are per-token, pre-effects
@@ -206,13 +207,18 @@ function compose(i){
   const base=Math.floor(rng()*FINISH.length);
   const work=new Uint8ClampedArray(finishData(base));
   let n=1+Math.floor(rng()*5); if(rng()<0.15)n+=2;
+  const layers=[];
   for(let k=0;k<n;k++){
     const isDB=rng()<0.55;
     const reg=pickRegion(rng,0.15);
     const a=(1+Math.floor(rng()*100))/100;
-    const layer=isDB?effectLayer(work,Math.floor(rng()*EFFECT.length)):finishData(Math.floor(rng()*FINISH.length));
+    const idx=Math.floor(rng()*(isDB?EFFECT.length:FINISH.length));   // одно rng() — порядок байт неизменён
+    const layer=isDB?effectLayer(work,idx):finishData(idx);
     blendRegion(work,layer,reg,a);
+    layers.push({isDB,idx,name:(isDB?EFFECT[idx][0]:FINISH[idx][0]),reg,a});
   }
+  LASTRECIPE={base,baseName:FINISH[base][0],n,layers,
+    databend:layers.some(l=>l.isDB),temp:T};
   return work;
 }
 
@@ -562,5 +568,5 @@ function buildChannels(i){
 }
 function init(w,h){W=w;H=h;SCALE=W/300;rb=W*3;fcv=document.createElement('canvas');fcv.width=W;fcv.height=H;fctx=fcv.getContext('2d');}
 
-window.ENGINE={init,fitMaster,compose,animFrames,setTemp,setPress,setSeries,setCount,get W(){return W;},get H(){return H;},get T(){return T;}};
+window.ENGINE={init,fitMaster,compose,animFrames,setTemp,setPress,setSeries,setCount,get W(){return W;},get H(){return H;},get T(){return T;},get lastRecipe(){return LASTRECIPE;}};
 })();

@@ -1,0 +1,814 @@
+[
+ {
+  "file": "001.jpg",
+  "title": "File:Capital factory tim cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Capital_factory_tim_cook.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Austin Community College"
+ },
+ {
+  "file": "002.jpg",
+  "title": "File:Donald Trump takes the oath of office (2025).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Donald_Trump_takes_the_oath_of_office_(2025).jpg",
+  "license": "Public domain",
+  "artist": "Joint Congressional Committee on Inaugural Ceremonies"
+ },
+ {
+  "file": "003.jpg",
+  "title": "File:Donald Trump visit to China, May 2026 P20260514DT-2130.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Donald_Trump_visit_to_China,_May_2026_P20260514DT-2130.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "004.jpg",
+  "title": "File:JD Vance takes the oath of office (2025).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:JD_Vance_takes_the_oath_of_office_(2025).jpg",
+  "license": "Public domain",
+  "artist": "Joint Congressional Committee on Inaugural Ceremonies"
+ },
+ {
+  "file": "005.jpg",
+  "title": "File:Mohammad Al Gergawi and Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Mohammad_Al_Gergawi_and_Tim_Cook.jpg",
+  "license": "CC0",
+  "artist": "UAE  Saif"
+ },
+ {
+  "file": "006.jpg",
+  "title": "File:P20251118DT-2072.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20251118DT-2072.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "007.jpg",
+  "title": "File:P20251118DT-3327.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20251118DT-3327.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "008.jpg",
+  "title": "File:P20251118DT-3757.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20251118DT-3757.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "009.jpg",
+  "title": "File:P20251118DT-3827.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20251118DT-3827.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "010.jpg",
+  "title": "File:P20251118DT-3981.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20251118DT-3981.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "011.jpg",
+  "title": "File:P20251118DT-4056.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20251118DT-4056.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "012.jpg",
+  "title": "File:Pedro Sánchez y Tim Cook en Palacio de La Moncloa 2018 (1).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pedro_S%C3%A1nchez_y_Tim_Cook_en_Palacio_de_La_Moncloa_2018_(1).jpg",
+  "license": "Attribution",
+  "artist": "Fernando Calvo Rollán"
+ },
+ {
+  "file": "013.jpg",
+  "title": "File:Pedro Sánchez y Tim Cook en Palacio de La Moncloa 2018 (2).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pedro_S%C3%A1nchez_y_Tim_Cook_en_Palacio_de_La_Moncloa_2018_(2).jpg",
+  "license": "Attribution",
+  "artist": "Fernando Calvo Rollán"
+ },
+ {
+  "file": "014.jpg",
+  "title": "File:Pedro Sánchez y Tim Cook en Palacio de La Moncloa 2018 (3).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pedro_S%C3%A1nchez_y_Tim_Cook_en_Palacio_de_La_Moncloa_2018_(3).jpg",
+  "license": "Attribution",
+  "artist": "Fernando Calvo Rollán"
+ },
+ {
+  "file": "015.jpg",
+  "title": "File:President Donald Trump delivers inaugural address.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Donald_Trump_delivers_inaugural_address.jpg",
+  "license": "Public domain",
+  "artist": "The Trump White House"
+ },
+ {
+  "file": "016.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49099870393).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49099870393).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "017.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49099980448).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49099980448).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "018.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49099985198).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49099985198).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "019.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49099985473).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49099985473).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "020.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100010848).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100010848).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "021.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100011033).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100011033).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "022.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100377301).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100377301).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "023.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100377376).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100377376).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "024.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100490526).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100490526).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "025.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100574402).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100574402).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "026.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100681262).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100681262).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "027.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100681517).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100681517).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "028.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100681537).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100681537).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "029.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49100685987).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49100685987).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "030.jpg",
+  "title": "File:Professor Lorna M Hughes and Tim Cook, CEO of Apple.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Professor_Lorna_M_Hughes_and_Tim_Cook,_CEO_of_Apple.jpg",
+  "license": "CC BY-SA 4.0 · BY-SA (share-alike!)",
+  "artist": "Usermare"
+ },
+ {
+  "file": "031.jpg",
+  "title": "File:Steven Mnuchin and Tim Cook at Apple HQ.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Steven_Mnuchin_and_Tim_Cook_at_Apple_HQ.jpg",
+  "license": "Public domain",
+  "artist": "Office of U.S. Treasury Secretary"
+ },
+ {
+  "file": "032.jpg",
+  "title": "File:The American Workforce Policy Advisory Board Meeting (46394773625).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:The_American_Workforce_Policy_Advisory_Board_Meeting_(46394773625).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "033.jpg",
+  "title": "File:Tim Cook (2017) (cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_(2017)_(cropped).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Austin Community College"
+ },
+ {
+  "file": "034.jpg",
+  "title": "File:Tim Cook (2017) (cropped2).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_(2017)_(cropped2).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Austin Community College"
+ },
+ {
+  "file": "035.jpg",
+  "title": "File:P20250806MR-0248 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook (cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0248_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook_(cropped).jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "036.jpg",
+  "title": "File:Tim Cook, John Ternus and Roberta Metsola - 20260528 (EP-206032A).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook,_John_Ternus_and_Roberta_Metsola_-_20260528_(EP-206032A).jpg",
+  "license": "Attribution",
+  "artist": "Amy Osborne / European Union"
+ },
+ {
+  "file": "037.jpg",
+  "title": "File:Tim Cook (2017).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_(2017).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Austin Community College"
+ },
+ {
+  "file": "038.jpg",
+  "title": "File:Tim Cook (2017, cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_(2017,_cropped).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Austin Community College"
+ },
+ {
+  "file": "039.jpg",
+  "title": "File:Tim Cook Apple Park (cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_Apple_Park_(cropped).jpg",
+  "license": "CC BY 4.0",
+  "artist": "Brooks Kraft"
+ },
+ {
+  "file": "040.jpg",
+  "title": "File:Tim Cook March 2026.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_March_2026.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Tessa Bury"
+ },
+ {
+  "file": "041.jpg",
+  "title": "File:Tim Cook March 2026 (cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_March_2026_(cropped).jpg",
+  "license": "CC BY 4.0",
+  "artist": "Tessa Bury"
+ },
+ {
+  "file": "042.jpg",
+  "title": "File:Tim Cook March 2026 (cropped) 2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_March_2026_(cropped)_2.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Tessa Bury"
+ },
+ {
+  "file": "043.jpg",
+  "title": "File:Tim Cook WWDC 2012.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_WWDC_2012.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Mike Deerkoski"
+ },
+ {
+  "file": "044.jpg",
+  "title": "File:Tim Cook Waving.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_Waving.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Tessa Bury"
+ },
+ {
+  "file": "045.jpg",
+  "title": "File:Tim Cook and Mike Bloomberg at Global Business Forum Sept 2017.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_and_Mike_Bloomberg_at_Global_Business_Forum_Sept_2017.jpg",
+  "license": "CC0",
+  "artist": "Mike Bloomberg"
+ },
+ {
+  "file": "046.jpg",
+  "title": "File:Tim Cook with Chongqing Mayor Huang in Apple Jiefangbei.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_with_Chongqing_Mayor_Huang_in_Apple_Jiefangbei.jpg",
+  "license": "CC BY-SA 4.0 · BY-SA (share-alike!)",
+  "artist": "Junyi Lou"
+ },
+ {
+  "file": "047.jpg",
+  "title": "File:US–UK State Banquet at Windsor Castle in September 2025.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:US%E2%80%93UK_State_Banquet_at_Windsor_Castle_in_September_2025.jpg",
+  "license": "Public domain",
+  "artist": "Executive Office of the President of the United States"
+ },
+ {
+  "file": "048.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061886-130539.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061886-130539.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Lukasz Kobus"
+ },
+ {
+  "file": "049.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061886-199877.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061886-199877.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Lukasz Kobus"
+ },
+ {
+  "file": "050.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061886-227860.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061886-227860.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Lukasz Kobus"
+ },
+ {
+  "file": "051.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061886-238936.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061886-238936.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Lukasz Kobus"
+ },
+ {
+  "file": "052.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061886-718374.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061886-718374.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Lukasz Kobus"
+ },
+ {
+  "file": "053.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061886-743987.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061886-743987.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Lukasz Kobus"
+ },
+ {
+  "file": "054.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061904-519423.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061904-519423.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Christophe Licoppe"
+ },
+ {
+  "file": "055.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061904-667341.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061904-667341.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Christophe Licoppe"
+ },
+ {
+  "file": "056.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061904-755038.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061904-755038.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Christophe Licoppe"
+ },
+ {
+  "file": "057.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061904-821808.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061904-821808.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Christophe Licoppe"
+ },
+ {
+  "file": "058.jpg",
+  "title": "File:Visit of Tim Cook to the European Commission - P061904-946789.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Visit_of_Tim_Cook_to_the_European_Commission_-_P061904-946789.jpg",
+  "license": "CC BY 4.0",
+  "artist": "European Commission - Photographer: Christophe Licoppe"
+ },
+ {
+  "file": "059.jpg",
+  "title": "File:VisitofTim Cook to the European Commission - P061904-946789.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:VisitofTim_Cook_to_the_European_Commission_-_P061904-946789.jpg",
+  "license": "CC0",
+  "artist": "TimCookBerdaiOthmaneCA"
+ },
+ {
+  "file": "060.jpg",
+  "title": "File:Windsor Castle State Banquet 2025-09-17-16-05-00.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Windsor_Castle_State_Banquet_2025-09-17-16-05-00.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "061.jpg",
+  "title": "File:Windsor Castle State Banquet 2025-09-17-16-06-35.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Windsor_Castle_State_Banquet_2025-09-17-16-06-35.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "062.jpg",
+  "title": "File:Windsor Castle State Banquet 2025-09-17-18-06-03.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Windsor_Castle_State_Banquet_2025-09-17-18-06-03.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "063.jpg",
+  "title": "File:Xi-Trump meeting at the American side (1)-20260514.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Xi-Trump_meeting_at_the_American_side_(1)-20260514.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "064.jpg",
+  "title": "File:Xi-Trump meeting at the American side (2)-20260514.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Xi-Trump_meeting_at_the_American_side_(2)-20260514.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "065.jpg",
+  "title": "File:Владимир Зеленский и Тим Кук 01 (02-09-2021).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BC%D0%B8%D1%80_%D0%97%D0%B5%D0%BB%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B8_%D0%A2%D0%B8%D0%BC_%D0%9A%D1%83%D0%BA_01_(02-09-2021).jpg",
+  "license": "CC BY 4.0",
+  "artist": "Brooks Kraft"
+ },
+ {
+  "file": "066.jpg",
+  "title": "File:Владимир Зеленский и Тим Кук 02 (02-09-2021).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BC%D0%B8%D1%80_%D0%97%D0%B5%D0%BB%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D0%B8_%D0%A2%D0%B8%D0%BC_%D0%9A%D1%83%D0%BA_02_(02-09-2021).jpg",
+  "license": "CC BY 4.0",
+  "artist": "Пресс-служба Президента Украины"
+ },
+ {
+  "file": "067.jpg",
+  "title": "File:Тим Кук (02-09-2021).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%D0%A2%D0%B8%D0%BC_%D0%9A%D1%83%D0%BA_(02-09-2021).jpg",
+  "license": "CC BY 4.0",
+  "artist": "Brooks Kraft"
+ },
+ {
+  "file": "068.jpg",
+  "title": "File:معالي محمد القرقاوي مع الرئيس التنفيذي لشركة أبل.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%D9%85%D8%B9%D8%A7%D9%84%D9%8A_%D9%85%D8%AD%D9%85%D8%AF_%D8%A7%D9%84%D9%82%D8%B1%D9%82%D8%A7%D9%88%D9%8A_%D9%85%D8%B9_%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3_%D8%A7%D9%84%D8%AA%D9%86%D9%81%D9%8A%D8%B0%D9%8A_%D9%84%D8%B4%D8%B1%D9%83%D8%A9_%D8%A3%D8%A8%D9%84.jpg",
+  "license": "CC0",
+  "artist": "UAE  Saif"
+ },
+ {
+  "file": "069.jpg",
+  "title": "File:P20250806DT-0020 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0020_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "070.jpg",
+  "title": "File:P20250806DT-0022 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0022_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "071.jpg",
+  "title": "File:P20250806DT-0102 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0102_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "072.jpg",
+  "title": "File:P20250806DT-0110 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0110_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "073.jpg",
+  "title": "File:P20250806DT-0112 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0112_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "074.jpg",
+  "title": "File:P20250806DT-0120 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0120_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "075.jpg",
+  "title": "File:P20250806DT-0132 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0132_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "076.jpg",
+  "title": "File:P20250806DT-0180 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0180_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "077.jpg",
+  "title": "File:P20250806DT-0188 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0188_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "078.jpg",
+  "title": "File:P20250806DT-0209 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0209_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "079.jpg",
+  "title": "File:P20250806DT-0233 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0233_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "080.jpg",
+  "title": "File:P20250806DT-0244 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0244_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "081.jpg",
+  "title": "File:P20250806DT-0254 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0254_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "082.jpg",
+  "title": "File:P20250806DT-0264 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0264_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "083.jpg",
+  "title": "File:P20250806DT-0266 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0266_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "084.jpg",
+  "title": "File:P20250806DT-0286 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0286_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "085.jpg",
+  "title": "File:P20250806DT-0293 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0293_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "086.jpg",
+  "title": "File:P20250806DT-0296 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0296_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "087.jpg",
+  "title": "File:P20250806DT-0304 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0304_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "088.jpg",
+  "title": "File:P20250806DT-0312 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0312_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "089.jpg",
+  "title": "File:P20250806DT-0326 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0326_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "090.jpg",
+  "title": "File:P20250806DT-0340 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0340_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "091.jpg",
+  "title": "File:P20250806DT-0353 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0353_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "092.jpg",
+  "title": "File:P20250806DT-0386 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0386_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "093.jpg",
+  "title": "File:P20250806DT-0393 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806DT-0393_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "094.jpg",
+  "title": "File:P20250806MR-0156 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0156_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "095.jpg",
+  "title": "File:P20250806MR-0173 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0173_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "096.jpg",
+  "title": "File:P20250806MR-0233 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0233_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "097.jpg",
+  "title": "File:P20250806MR-0248 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0248_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "098.jpg",
+  "title": "File:P20250806MR-0273 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0273_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "099.jpg",
+  "title": "File:P20250806MR-0312 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0312_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "100.jpg",
+  "title": "File:P20250806MR-0320 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0320_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "101.jpg",
+  "title": "File:P20250806MR-0377 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0377_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "102.jpg",
+  "title": "File:P20250806MR-0392 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0392_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "103.jpg",
+  "title": "File:P20250806MR-0441 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0441_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "104.jpg",
+  "title": "File:P20250806MR-0445 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0445_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "105.jpg",
+  "title": "File:P20250806MR-0526 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0526_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "106.jpg",
+  "title": "File:P20250806MR-0571 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0571_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "107.jpg",
+  "title": "File:P20250806MR-0579 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0579_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "108.jpg",
+  "title": "File:P20250806MR-0590 President Donald Trump delivers investment remarks alongside Apple CEO Tim Cook.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:P20250806MR-0590_President_Donald_Trump_delivers_investment_remarks_alongside_Apple_CEO_Tim_Cook.jpg",
+  "license": "Public domain",
+  "artist": "The White House"
+ },
+ {
+  "file": "109.jpg",
+  "title": "File:20160119-DSC07341 (23964356193).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20160119-DSC07341_(23964356193).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Marc Nozell from Merrimack, New Hampshire, USA"
+ },
+ {
+  "file": "110.jpg",
+  "title": "File:20160119-DSC07342 (24223402829).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:20160119-DSC07342_(24223402829).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Marc Nozell from Merrimack, New Hampshire, USA"
+ },
+ {
+  "file": "111.jpg",
+  "title": "File:Ocean washing ashore 2 (Unsplash).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ocean_washing_ashore_2_(Unsplash).jpg",
+  "license": "CC0",
+  "artist": "Tim Cook thetimcook"
+ },
+ {
+  "file": "112.jpg",
+  "title": "File:President Trump Tours the Apple Manufacturing Plant (49099980278).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:President_Trump_Tours_the_Apple_Manufacturing_Plant_(49099980278).jpg",
+  "license": "Public domain",
+  "artist": "The White House from Washington, DC"
+ },
+ {
+  "file": "113.jpg",
+  "title": "File:Tim Cook (cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_(cropped).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Marc Nozell from Merrimack, New Hampshire, USA"
+ },
+ {
+  "file": "114.jpg",
+  "title": "File:Tim Cook - 2017 (DanH-1323).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_-_2017_(DanH-1323).jpg",
+  "license": "CC BY-SA 4.0 · BY-SA (share-alike!)",
+  "artist": "Dan Harasymchuk"
+ },
+ {
+  "file": "115.jpg",
+  "title": "File:Tim Cook - 2017 (DanH-1323) (cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_-_2017_(DanH-1323)_(cropped).jpg",
+  "license": "CC BY-SA 4.0 · BY-SA (share-alike!)",
+  "artist": "Dan Harasymchuk"
+ },
+ {
+  "file": "116.jpg",
+  "title": "File:Tim Cook 2016 (Unsplash).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Tim_Cook_2016_(Unsplash).jpg",
+  "license": "CC0",
+  "artist": "Tim Cook thetimcook"
+ }
+]

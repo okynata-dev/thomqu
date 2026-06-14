@@ -1,0 +1,46 @@
+{
+ "name": "SAYLOR / MSTR — No. 100",
+ "description": "THOMQU — a silkscreen press wired to a ticker. Michael Saylor (MSTR) rendered as a generative screenprint: posterized ink plates, press misregistration and databend, the day's newspaper baked into the channels. Each work is frozen at its mint-day press state. 100 of 128, limited edition. thomqu.com",
+ "image": "https://thomqu.com/drop/saylor/img/100.png",
+ "external_url": "https://thomqu.com/token.html?n=371&s=saylor&t=0.50",
+ "attributes": [
+  {
+   "trait_type": "Series",
+   "value": "Saylor / MSTR"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "MSTR"
+  },
+  {
+   "trait_type": "Base Finish",
+   "value": "1-bit Stamp"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 1
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "trait_type": "Press State",
+   "value": "Clean"
+  },
+  {
+   "trait_type": "Effect",
+   "value": "Chunk Repeat"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "Edition",
+   "value": 100,
+   "max_value": 128
+  },
+  {
+   "trait_type": "Press No.",
+   "value": "371"
+  }
+ ]
+}

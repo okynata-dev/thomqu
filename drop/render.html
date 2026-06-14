@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>bake</title></head>
+<body>
+<!-- Headless bake harness: drives the REAL engine.js so a drop PNG == the on-site token, byte-faithful.
+     Playwright (scripts/bake_drop.py) calls window.bake(slug, engineIdx0, temp, longSide). -->
+<script src="../master-data.js"></script>
+<script src="../engine.js?v=8"></script>
+<script src="../series.js?v=8"></script>
+<script>
+"use strict";
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+const _mcache={};
+function loadImg(src){return _mcache[src]||(_mcache[src]=new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej(new Error('img '+src));im.src=src;}));}
+
+let MASTERS=null, CURSER=null;
+async function ensureSeries(slug){
+  if(CURSER===slug)return;
+  const m=await(await fetch('../assets/'+slug+'/manifest.json')).json();
+  MASTERS=(m.masters&&m.masters.length)?m.masters.map(f=>'../assets/'+slug+'/'+f):[window.MASTER_SRC];
+  ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[slug]||null);
+  CURSER=slug;
+}
+
+// engineIdx0 = 0-based token index for the engine; temp 0..1; longSide = output height
+window.bake=async function(slug, engineIdx0, temp, longSide){
+  await ensureSeries(slug);
+  const H=longSide, Wt=Math.round(H*0.75);
+  ENGINE.init(Wt,H); ENGINE.setCount(500);
+  const src=MASTERS[hashStr('master-'+slug+'-'+engineIdx0)%MASTERS.length];
+  const img=await loadImg(src);
+  ENGINE.fitMaster(img); ENGINE.setTemp(temp); ENGINE.setPress(true);
+  const work=ENGINE.compose(engineIdx0);
+  const recipe=ENGINE.lastRecipe;
+  const cv=document.createElement('canvas'); cv.width=Wt; cv.height=H;
+  cv.getContext('2d').putImageData(new ImageData(work,Wt,H),0,0);
+  return {png:cv.toDataURL('image/png'), recipe, w:Wt, h:H, master:src.split('/').pop()};
+};
+window.__ready=true;
+</script>
+</body>
+</html>
