@@ -16,7 +16,7 @@ function loadImg(src){return _mcache[src]||(_mcache[src]=new Promise((res,rej)=>
 let MASTERS=null, CURSER=null;
 async function ensureSeries(slug){
   if(CURSER===slug)return;
-  const m=await(await fetch('../assets/'+slug+'/manifest.json')).json();
+  const m=await(await fetch('../assets/'+slug+'/manifest.json')).json();window.__MMOD=m.masterMod||0;
   MASTERS=(m.masters&&m.masters.length)?m.masters.map(f=>'../assets/'+slug+'/'+f):[window.MASTER_SRC];
   ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[slug]||null);
   CURSER=slug;
@@ -27,7 +27,7 @@ window.bake=async function(slug, engineIdx0, temp, longSide){
   await ensureSeries(slug);
   const H=longSide, Wt=Math.round(H*0.75);
   ENGINE.init(Wt,H); ENGINE.setCount(500);
-  const src=MASTERS[hashStr('master-'+slug+'-'+engineIdx0)%MASTERS.length];
+  const src=MASTERS[hashStr('master-'+slug+'-'+engineIdx0)%(window.__MMOD||MASTERS.length)];
   const img=await loadImg(src);
   ENGINE.fitMaster(img); ENGINE.setTemp(temp); ENGINE.setPress(true);
   const work=ENGINE.compose(engineIdx0);

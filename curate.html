@@ -50,7 +50,7 @@ function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCo
 let KEEP=new Set(JSON.parse(localStorage.getItem(LSKEY)||'[]'));
 let MASTERS=[window.MASTER_SRC];
 const ICACHE={};
-const midx=i=>hashStr('master-'+SER+'-'+i)%MASTERS.length;
+const midx=i=>hashStr('master-'+SER+'-'+i)%(window.__MMOD||MASTERS.length);
 const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=MASTERS[mi];}));
 
 const cvs={},done={},queue=[];let busy=false;
@@ -105,7 +105,7 @@ function build(){
   for(let k=0;k<10;k++)enqueue(k);
 }
 (async()=>{
-  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
+  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();window.__MMOD=m.masterMod||0;
     if(m.masters&&m.masters.length)MASTERS=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
   ENGINE.init(RW,RH);ENGINE.setCount(COUNT);
   ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);

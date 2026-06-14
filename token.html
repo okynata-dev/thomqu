@@ -48,12 +48,12 @@ const go=n=>location.href='token.html?n='+((n+COUNT-1)%COUNT+1)+'&res='+LONG+'&t
 
 (async()=>{
   let masters=[window.MASTER_SRC];
-  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
+  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();window.__MMOD=m.masterMod||0;
     if(m.masters&&m.masters.length)masters=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
   const img=new Image();
   img.onload=()=>{ENGINE.init(Wt,H);ENGINE.setCount(COUNT);ENGINE.setSeries(window.SERIES_CFG&&SERIES_CFG[SER]||null);
     ENGINE.fitMaster(img);ENGINE.setTemp(TEMP);ENGINE.setPress(p.get('press')!=='0');setTimeout(render,30);};
-  img.src=masters[hashStr('master-'+SER+'-'+(N-1))%masters.length];                 // фото токена — по seed'у
+  img.src=masters[hashStr('master-'+SER+'-'+(N-1))%(window.__MMOD||masters.length)];                 // фото токена — по seed'у
 })();
 
 const regime=t=>t>0.62?['OVERHEATED','hot']:t<0.38?['BURNOUT','cold']:['CLEAN','neutral'];

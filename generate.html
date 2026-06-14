@@ -61,7 +61,7 @@ function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCo
 
 let MASTERS=[window.MASTER_SRC];       // fallback — один встроенный мастер
 const ICACHE={};
-const midx=i=>hashStr('master-'+SER+'-'+i)%MASTERS.length;      // фото токена выбирается seed'ом
+const midx=i=>hashStr('master-'+SER+'-'+i)%(window.__MMOD||MASTERS.length);      // фото токена выбирается seed'ом
 const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=MASTERS[mi];}));
 
 let TOKENS=[];                         // список id токенов (вся серия или кураторский набор из манифеста)
@@ -139,6 +139,7 @@ function build(){
 (async()=>{
   let man=null;
   try{man=await(await fetch('assets/'+SER+'/manifest.json')).json();}catch(e){}
+  window.__MMOD=(man&&man.masterMod)||0;
   if(man&&man.masters&&man.masters.length){MASTERS=man.masters.map(f=>'assets/'+SER+'/'+f);document.title=(man.name||'The Press Run')+' — THOMQU';}
   TOKENS=(man&&man.curated&&man.curated.length&&!Q.get('all'))
     ? man.curated.map(n=>n-1)                            // кураторский набор (1-based в манифесте)

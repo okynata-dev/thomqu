@@ -139,7 +139,7 @@ knockTitle(document.getElementById('t-hero'),'SAYLOR');
 const HERO_TOKEN=12;                                       // его же тиражный фаворит
 let MASTERS=[window.MASTER_SRC];
 const ICACHE={};
-const midx=i=>hashStr('master-'+SER+'-'+i)%MASTERS.length;
+const midx=i=>hashStr('master-'+SER+'-'+i)%(window.__MMOD||MASTERS.length);
 const getImg=mi=>ICACHE[mi]||(ICACHE[mi]=new Promise(res=>{const im=new Image();im.onload=()=>res(im);im.onerror=()=>res(null);im.src=MASTERS[mi];}));
 const jobs=[];let busy=false;
 function job(f){jobs.push(f);run();}
@@ -155,7 +155,7 @@ function renderToken(n1,wpx,hpx){
     return c;});
 }
 (async()=>{
-  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();
+  try{const m=await(await fetch('assets/'+SER+'/manifest.json')).json();window.__MMOD=m.masterMod||0;
     if(m.masters&&m.masters.length)MASTERS=m.masters.map(f=>'assets/'+SER+'/'+f);}catch(e){}
   job(async()=>{                                           // герой: одна работа во весь экран
     const t=await renderToken(HERO_TOKEN,1200,1600);if(!t)return;
