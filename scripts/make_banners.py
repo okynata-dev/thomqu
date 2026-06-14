@@ -54,7 +54,7 @@ def chip(d,xy,text,f,fg=PAPER,bg=INK,pad=6):
     bb=d.textbbox(xy,text,font=f); d.rectangle([bb[0]-pad,bb[1]-pad,bb[2]+pad,bb[3]+pad],fill=bg); d.text(xy,text,font=f,fill=fg)
 
 def giant_wordmark(text,W,H,fill=PAPER,seed=0):
-    BASE=460; f=font(HELV,BASE,HELV_BOLD)
+    BASE=max(520,int(H*0.92)); f=font(HELV,BASE,HELV_BOLD)   # render source near target height -> crisp at 4K
     td=ImageDraw.Draw(Image.new('L',(10,10))); bb=td.textbbox((0,0),text,font=f)
     tw,th=bb[2]-bb[0],bb[3]-bb[1]; pad=max(4,int(BASE*0.02))
     tight=Image.new('RGBA',(tw+pad*2,th+pad*2),(0,0,0,0))
@@ -89,21 +89,21 @@ def montage(toks,W,H,seed,square=False):
     return im
 
 def collection_banner(slug,toks,seed):
-    W,H=1500,500; sn,tk=SERIES[slug]
+    W,H=3840,1280; sn,tk=SERIES[slug]                        # 4K wide (3:1)
     im=montage(toks[:5],W,H,seed,square=False)
     wm=giant_wordmark(sn,W,H,seed=seed); im.paste(wm,(0,0),wm)
-    chip(ImageDraw.Draw(im),(int(W*0.012),int(H*0.93)),f'{sn} / {tk} · THOMQU.COM',font(MONO,16),fg=GREY)
+    chip(ImageDraw.Draw(im),(int(W*0.012),int(H*0.93)),f'{sn} / {tk} · THOMQU.COM',font(MONO,int(H*0.026)),fg=GREY)
     save(grain(im,seed),f'banner_{slug}')
 
 def collection_square(slug,toks,seed):
-    S=1080; sn,tk=SERIES[slug]
+    S=2560; sn,tk=SERIES[slug]                               # 4K square
     im=montage(toks[:6],S,S,seed+5,square=True)
     wm=giant_wordmark(sn,S,S,seed=seed+5); im.paste(wm,(0,0),wm)
-    chip(ImageDraw.Draw(im),(int(S*0.02),int(S*0.955)),f'{sn} / {tk} · THOMQU.COM',font(MONO,18),fg=GREY)
+    chip(ImageDraw.Draw(im),(int(S*0.02),int(S*0.955)),f'{sn} / {tk} · THOMQU.COM',font(MONO,int(S*0.016)),fg=GREY)
     save(grain(im,seed+5),f'square_{slug}')
 
 def avatar_mark():
-    S=1000; im=Image.new('RGB',(S,S),INK); d=ImageDraw.Draw(im)
+    S=2000; im=Image.new('RGB',(S,S),INK); d=ImageDraw.Draw(im)
     diag_bar(im,(-30,int(S*0.72)),(S+30,int(S*0.30)),40,RED)
     reg_mark(d,S//2,int(S*0.40),int(S*0.20),PAPER,9)
     wm=giant_wordmark('THOMQU',int(S*0.86),int(S*0.18)); im.paste(wm,(int(S*0.07),int(S*0.30)),wm)
@@ -117,7 +117,7 @@ def serve(root,port):
     httpd=socketserver.TCPServer(('127.0.0.1',port),h)
     threading.Thread(target=httpd.serve_forever,daemon=True).start(); return httpd
 
-def render_tokens(pg,slug,idxs,H=1200,temp=0.5):
+def render_tokens(pg,slug,idxs,H=2800,temp=0.5):       # high-res token cuts for 4K montages
     out=[]
     for i in idxs:
         r=pg.evaluate('([s,i,t,h])=>window.bake(s,i,t,h)',[slug,i,temp,H])
