@@ -542,6 +542,21 @@ function pressLayer(i){
   if(rng()<lb)logoPlate();if(rng()<lb*0.4)logoPlate();
   if(rng()<lb*0.7)logoRow();
   if(rng()<0.55)redMarks();if(rng()<0.2)redMarks();
+  // цена-экстремум добавляет прессы: жара/крах = больше заголовков, колонок, графиков, таблиц.
+  // xT=0 при t=0.5 (HEAT=BURN=0) => ни одного лишнего rng() => снапшот минта байт-в-байт неизменен.
+  const xT=Math.max(HEAT,BURN);
+  for(let e=0,ex=Math.floor(xT*7);e<ex;e++){
+    headline();if(rng()<0.7)headline();
+    if(rng()<0.7)ticker();
+    if(rng()<0.75)column();if(rng()<0.45)column();          // статьи-колонки
+    if(rng()<0.7)chart();if(rng()<0.45)chart();             // графики
+    if(rng()<0.6)datatable();if(rng()<0.3)datatable();
+    if(rng()<0.5)stamp();if(rng()<0.45)pullQuote();if(rng()<0.35)redMarks();}
+  if(xT>0.25){
+    if(rng()<xT)bubbleTimeline();
+    if(rng()<xT)orderBook();
+    if(rng()<xT)chart();
+    if(rng()<xT*0.8)pageIndex();}
   if(!drawn)headline();
   return PCV;
 }

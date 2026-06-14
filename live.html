@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THOMQU — live</title>
+<meta name="robots" content="noindex">
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;}
+  #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  #wrap canvas{max-width:100%;max-height:100%;height:auto;width:auto;display:block;}
+  #status{color:#555;font:13px ui-monospace,Menlo,monospace;}
+  #hud{position:fixed;left:0;right:0;bottom:max(14px,2.4vh);text-align:center;z-index:2;
+    font:600 14px ui-monospace,Menlo,monospace;color:#9a9a9a;letter-spacing:.06em;
+    text-shadow:0 1px 4px #000;pointer-events:none;}
+  #hud b{font-size:20px;}
+  .up{color:#28d46e;} .dn{color:#eb2e3a;} .neu{color:#9a9a9a;}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="status">…</div></div>
+<div id="hud"></div>
+<script src="master-data.js"></script>
+<script src="engine.js?v=9"></script>
+<script src="series.js?v=9"></script>
+<script>
+"use strict";
+// animation_url renderer: token's press temperature is driven by the LIVE price within the frozen band.
+// t=0.5 (mid) == the frozen mint image; toward ATH the press overheats, toward the low it burns out.
+const p=new URLSearchParams(location.search);
+const SER=(p.get('s')||'saylor').replace(/[^a-z]/g,'');
+const ID=Math.max(1,parseInt(p.get('id')||'1',10)||1);                 // drop tokenId (1..N)
+const RES=Math.max(700,Math.min(1600,parseInt(p.get('res')||'1000',10)||1000));
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+
+let MASTERS=[window.MASTER_SRC], ENG_IDX=ID-1, CFG=null, LOW=0, HIGH=1, prevPrice=null, ready=false;
+const regime=t=>t>0.62?['OVERHEATED','up']:t<0.38?['BURNOUT','dn']:['CLEAN','neu'];
+
+(async()=>{
+  let man=null;
+  try{man=await(await fetch('assets/'+SER+'/manifest.json')).json();}catch(e){}
+  window.__MMOD=(man&&man.masterMod)||0;
+  if(man&&man.masters&&man.masters.length)MASTERS=man.masters.map(f=>'assets/'+SER+'/'+f);
+  if(man&&man.curated&&man.curated.length)ENG_IDX=(man.curated[ID-1]||ID)-1;   // tokenId -> engine index
+  CFG=(window.SERIES_CFG&&SERIES_CFG[SER])||null;
+  LOW=(CFG&&CFG.low)||0; HIGH=(CFG&&CFG.high)||1;
+  const H=RES, W=Math.round(H*0.75);
+  ENGINE.init(W,H); ENGINE.setSeries(CFG); ENGINE.setPress(true);
+  const src=MASTERS[hashStr('master-'+SER+'-'+ENG_IDX)%(window.__MMOD||MASTERS.length)];
+  const img=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;});
+  if(img)ENGINE.fitMaster(img);
+  ready=true;
+  await tick();
+  setInterval(tick, 5*60*1000);                                        // refresh every 5 min
+})();
+
+async function tick(){
+  if(!ready)return;
+  let price=null,date=null;
+  try{const j=await(await fetch('/price?ticker='+encodeURIComponent(((CFG&&CFG.ticker)||'MSTR').toLowerCase())+'&_='+Date.now())).json();
+    price=j.price;date=j.date;}catch(e){}
+  let t=0.5;
+  if(price!=null && HIGH>LOW){t=(price-LOW)/(HIGH-LOW);t=t<0?0:t>1?1:t;}
+  ENGINE.setTemp(t);
+  const W=ENGINE.W,H=ENGINE.H,work=ENGINE.compose(ENG_IDX);
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  cv.getContext('2d').putImageData(new ImageData(work,W,H),0,0);
+  const wrap=document.getElementById('wrap');wrap.innerHTML='';wrap.appendChild(cv);
+  const[rg,cls]=regime(t), tk=(CFG&&CFG.ticker)||'MSTR';
+  const dir=(prevPrice!=null&&price!=null)?(price>=prevPrice?'up':'dn'):cls;
+  prevPrice=price;
+  document.getElementById('hud').innerHTML=
+    '<b class="'+dir+'">'+(price!=null?'$'+price.toFixed(2):'—')+'</b> '+tk
+    +' &nbsp;·&nbsp; <span class="'+cls+'">'+rg+'</span> &nbsp;·&nbsp; THOMQU #'+ID;
+}
+</script>
+</body>
+</html>
