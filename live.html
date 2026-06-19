@@ -21,8 +21,8 @@
 <div id="wrap"><div id="status">…</div></div>
 <div id="hud"></div>
 <script src="master-data.js"></script>
-<script src="engine.js?v=9"></script>
-<script src="series.js?v=9"></script>
+<script src="engine.js?v=10"></script>
+<script src="series.js?v=10"></script>
 <script>
 "use strict";
 // animation_url renderer. Two ways to address a work:
@@ -76,23 +76,49 @@ const regime=t=>t>0.62?['OVERHEATED','up']:t<0.38?['BURNOUT','dn']:['CLEAN','neu
   ready=true; await tick(); setInterval(tick, 5*60*1000);
 })();
 
+const fmtP=v=>v>=1000?Math.round(v).toLocaleString('en-US'):(v<1?v.toFixed(4):v.toFixed(2));
+const fmtV=v=>v==null?null:(v>=1e9?(v/1e9).toFixed(1)+'B':v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':''+v);
+
+// Build today's REAL press copy: a live ticker line + data-driven headlines (our words, real numbers).
+function buildLive(q,t){
+  if(q.price==null)return null;
+  const tk=B.tk, P=fmtP(q.price), chg=q.prevClose?(q.price/q.prevClose-1)*100:0,
+        up=chg>=0, sgn=up?'+':'', arr=up?'▲':'▼';
+  const ticks=[]; let main=tk+' '+P+' '+arr+' '+sgn+chg.toFixed(2)+'%';
+  if(q.w52Low!=null&&q.w52High!=null)main+='   52W '+fmtP(q.w52Low)+'–'+fmtP(q.w52High);
+  const vol=fmtV(q.volume); if(vol)main+='   VOL '+vol;
+  if(q.date)main+='   '+q.date;
+  ticks.push(main);
+  if(q.dayHigh!=null&&q.dayLow!=null)ticks.push(tk+'  H '+fmtP(q.dayHigh)+'  L '+fmtP(q.dayLow)+'  LAST '+P);
+  const heads=[], newHigh=q.w52High!=null&&q.price>=q.w52High*0.995, newLow=q.w52Low!=null&&q.price<=q.w52Low*1.02;
+  if(newHigh){heads.push('RECORD CLOSE, AGAIN');heads.push(tk+' PRINTS A NEW HIGH');}
+  else if(chg>=5){heads.push('THE MELT-UP CONTINUES');heads.push(tk+' '+sgn+chg.toFixed(1)+'% · STILL BID');}
+  else if(chg>=1){heads.push('GREEN ON THE SCREEN');}
+  else if(chg<=-5){heads.push('THE UNWIND ACCELERATES');heads.push(tk+' '+chg.toFixed(1)+'% · MARGIN MATH');}
+  else if(chg<=-1){heads.push('RED ACROSS THE BOARD');}
+  else{heads.push('THE MARKET HOLDS ITS BREATH');}
+  if(newLow)heads.push('THE PREMIUM IS GONE');
+  if(t>0.62)heads.push('EUPHORIA, PRICED IN'); else if(t<0.20)heads.push('AFTER THE GOLD RUSH');
+  return {ticks, heads:heads.slice(0,3), stamps:[sgn+chg.toFixed(1)+'%','$'+P,arr]};
+}
+
 async function tick(){
   if(!ready)return;
-  let price=null;
-  try{const j=await(await fetch('/price?ticker='+encodeURIComponent(B.sym)+'&_='+Date.now())).json();price=j.price;}catch(e){}
+  let q={price:null};
+  try{q=await(await fetch('/price?ticker='+encodeURIComponent(B.sym)+'&_='+Date.now())).json();}catch(e){}
   let t=0.5;
-  if(price!=null && B.high>B.low){t=(price-B.low)/(B.high-B.low);t=t<0?0:t>1?1:t;}
-  ENGINE.setTemp(t);
+  if(q.price!=null && B.high>B.low){t=(q.price-B.low)/(B.high-B.low);t=t<0?0:t>1?1:t;}
+  ENGINE.setLive(buildLive(q,t)); ENGINE.setTemp(t);              // inject today's real facts + price temperature
   const W=ENGINE.W,H=ENGINE.H,work=ENGINE.compose(ENG_IDX);
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;
   cv.getContext('2d').putImageData(new ImageData(work,W,H),0,0);
   const wrap=document.getElementById('wrap');wrap.innerHTML='';wrap.appendChild(cv);
-  const[rg,cls]=regime(t);
+  const[rg,cls]=regime(t), price=q.price;
   const dir=(prevPrice!=null&&price!=null)?(price>=prevPrice?'up':'dn'):cls;
   prevPrice=price;
-  const ps=price!=null?('$'+(price>=1000?price.toLocaleString('en-US',{maximumFractionDigits:0}):price.toFixed(price<1?4:2))):'—';
   document.getElementById('hud').innerHTML=
-    '<b class="'+dir+'">'+ps+'</b> '+B.tk+' &nbsp;·&nbsp; <span class="'+cls+'">'+rg+'</span> &nbsp;·&nbsp; THOMQU';
+    '<b class="'+dir+'">'+(price!=null?'$'+fmtP(price):'—')+'</b> '+B.tk
+    +' &nbsp;·&nbsp; <span class="'+cls+'">'+rg+'</span> &nbsp;·&nbsp; THOMQU';
 }
 </script>
 </body>

@@ -301,7 +301,9 @@ const DEF={name:'Jensen Huang',ticker:'NVDA',low:140.85,high:236.54,ath:'235.47'
  earn:[['REV',58,8,'B'],['DATA CTR',46,7,'B'],['GAMING',2.8,1.2,'B'],['AUTO',0.5,0.4,'B'],
        ['GM',73,3,'%'],['OP MARGIN',60,5,'%'],['EPS',1.2,0.5,''],['FCF',24,8,'B']]};
 let CFG=DEF;
+let LIVE=null;                                            // live market facts injected into the press (null = frozen)
 function setSeries(c){CFG=c?Object.assign({},DEF,c):DEF;}
+function setLive(o){LIVE=(o&&typeof o==='object')?o:null;}
 function setCount(c){COUNT=Math.max(1,c|0);}
 const fmtNum=v=>v>=1000?Math.round(v).toLocaleString('en-US'):v.toFixed(1);
 
@@ -316,7 +318,7 @@ function pressLayer(i){
   const band=CFG.low+T*(CFG.high-CFG.low);                  // цена, имплицированная температурой (замороженный band)
   const pick=o=>{const r=rng(),p=r<HEAT?o.hot:r<HEAT+BURN?o.cold:o.mid;return p[(rng()*p.length)|0];};
   const pickS=o=>{const r=rng();return r<HEAT?o.hot:r<HEAT+BURN?o.cold:o.mid;};
-  function headline(){const txt=pick(CFG.heads),serif=rng()<0.4,fs=(13+rng()*15)*S,vert=rng()<0.22,
+  function headline(force){const txt=force||pick(CFG.heads),serif=rng()<0.4,fs=(13+rng()*15)*S,vert=rng()<0.22,
     ko=!BLEED&&rng()<0.25,g=ko?KCTX:x,px=vert?(0.08+rng()*0.84)*W:W/2,
     py=vert?H/2:(rng()<0.5?(0.07+rng()*0.18)*H:(0.74+rng()*0.19)*H);
     g.save();g.translate(px,py);g.rotate(vert?CW+(rng()*6-3)*Math.PI/180:(rng()*8-4)*Math.PI/180);
@@ -330,7 +332,7 @@ function pressLayer(i){
     for(const e of CFG.sect){const up=rng()<0.5+(HEAT-BURN)*0.45;
       s+='   '+e[0]+' '+(e[1]*(1+(rng()-0.5)*0.08+(HEAT-BURN)*0.1)).toFixed(2)+(up?'▲':'▼');}
     return s;}
-  function ticker(){const txt=rng()<0.3?sectorLine():pick(CFG.ticks),fs=(6.5+rng()*4.5)*S,rep=(txt+'   ').repeat(8),m=rng();
+  function ticker(force){const txt=force||(rng()<0.3?sectorLine():pick(CFG.ticks)),fs=(6.5+rng()*4.5)*S,rep=(txt+'   ').repeat(8),m=rng();
     x.save();x.font='600 '+fs+'px ui-monospace,Menlo,Consolas,monospace';x.fillStyle=rng()<0.3?RED(0.9):INK(0.85);
     if(m<0.25){x.translate(rng()<0.5?fs*0.4+rng()*W*0.35:W-fs*1.1-rng()*W*0.35,0);x.rotate(CW);x.fillText(rep,-rng()*H*0.3,0);}      // CW: сверху вниз
     else if(m<0.5){x.translate(rng()<0.5?fs*1.1:W-fs*0.3,H);x.rotate(-CW);x.fillText(rep,-rng()*H*0.4,0);}                          // CCW: снизу вверх
@@ -348,7 +350,7 @@ function pressLayer(i){
         if(x.measureText(nx).width>cw&&line)break;line=nx;wi++;}
       x.fillText(line,0,l*lh);}
     x.restore();drawn++;}
-  function stamp(){const txt=pick(CFG.stamps),fs=(24+rng()*30)*S,ko=!BLEED&&rng()<0.25,g=ko?KCTX:x,
+  function stamp(force){const txt=force||pick(CFG.stamps),fs=(24+rng()*30)*S,ko=!BLEED&&rng()<0.25,g=ko?KCTX:x,
     px=(0.2+rng()*0.6)*W,py=(0.2+rng()*0.6)*H;
     g.save();g.translate(px,py);
     g.rotate(rng()<0.2?CW:(rng()*30-15)*Math.PI/180);
@@ -557,6 +559,12 @@ function pressLayer(i){
     if(rng()<xT)orderBook();
     if(rng()<xT)chart();
     if(rng()<xT*0.8)pageIndex();}
+  // LIVE: today's real market facts, screened/databent like the rest. Null on bakes => frozen unchanged.
+  if(LIVE){
+    (LIVE.ticks||[]).forEach(t=>{ticker(t);});
+    (LIVE.heads||[]).forEach(h=>{headline(h);});
+    (LIVE.stamps||[]).forEach(s=>{stamp(s);});
+  }
   if(!drawn)headline();
   return PCV;
 }
@@ -583,5 +591,5 @@ function buildChannels(i){
 }
 function init(w,h){W=w;H=h;SCALE=W/300;rb=W*3;fcv=document.createElement('canvas');fcv.width=W;fcv.height=H;fctx=fcv.getContext('2d');}
 
-window.ENGINE={init,fitMaster,compose,animFrames,setTemp,setPress,setSeries,setCount,get W(){return W;},get H(){return H;},get T(){return T;},get lastRecipe(){return LASTRECIPE;}};
+window.ENGINE={init,fitMaster,compose,animFrames,setTemp,setPress,setSeries,setLive,setCount,get W(){return W;},get H(){return H;},get T(){return T;},get lastRecipe(){return LASTRECIPE;}};
 })();
