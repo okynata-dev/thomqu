@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THOMQU — 200</title>
+<meta name="robots" content="noindex">
+<style>
+  html,body{margin:0;background:#0a0a0b;color:#9a9a9a;font:12px ui-monospace,Menlo,monospace;}
+  #top{position:sticky;top:0;z-index:5;background:rgba(10,10,11,0.92);backdrop-filter:blur(6px);
+    padding:11px 16px;border-bottom:1px solid #1c1c1e;letter-spacing:.14em;}
+  #top b{color:#f4f0e8;font-weight:700;} #top span{color:#666;}
+  #grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:16px;}
+  .cell{position:relative;}
+  .cell .ph{position:relative;aspect-ratio:3/4;background:#141414;overflow:hidden;}
+  .cell canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer;}
+  .cap{display:flex;justify-content:space-between;gap:8px;padding:6px 2px 0;font-size:11px;letter-spacing:.04em;}
+  .cap .tk{color:#cfcabd;} .up{color:#28d46e;} .dn{color:#eb2e3a;} .neu{color:#7a7a7a;}
+  @media(max-width:1100px){#grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:760px){#grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;}}
+</style>
+</head>
+<body>
+<div id="top"><b>THOMQU — 200</b> &nbsp;<span id="sub">live · price = temperature of the press</span></div>
+<div id="grid"></div>
+<script src="master-data.js"></script>
+<script src="engine.js?v=11"></script>
+<script src="series.js?v=11"></script>
+<script>
+"use strict";
+const MOBILE=matchMedia('(max-width:760px)').matches||/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const RW=MOBILE?360:420, RH=MOBILE?480:560;
+const MARGIN=MOBILE?'500px 0px':'1200px 0px';
+const MAXLIVE=MOBILE?16:120;
+function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+
+const BANDS={
+ saylor:{sym:'MSTR',low:104.17,high:457.20,tk:'MSTR'},huang:{sym:'NVDA',low:140.85,high:236.54,tk:'NVDA'},
+ vitalik:{sym:'ETH-USD',low:1388.12,high:4955.90,tk:'ETH'},powell:{sym:'^TNX',low:6.55,high:8.97,tk:'FED'},
+ gates:{sym:'MSFT',low:356.28,high:555.45,tk:'MSFT'},zuck:{sym:'META',low:520.26,high:796.25,tk:'META'},
+ cz:{sym:'BNB-USD',low:380,high:760,tk:'BNB'},trump:{sym:'TRUMP-USD',low:3.5,high:75.0,tk:'TRUMP'},
+ musk:{sym:'DOGE-USD',low:0.07,high:0.48,tk:'DOGE'},sbf:{sym:'FTT-USD',low:0.9,high:55.0,tk:'FTT'},
+ cathie:{sym:'ARKK',low:38,high:88,tk:'ARKK'},buffett:{sym:'BRK-B',low:408,high:558,tk:'BRK'},
+ armstrong:{sym:'COIN',low:140,high:360,tk:'COIN'},dorsey:{sym:'BTC-USD',low:58000,high:112000,tk:'BTC'},
+ dimon:{sym:'JPM',low:200,high:320,tk:'JPM'},dokwon:{sym:'LUNA-USD',low:0.0001,high:119.18,tk:'LUNA'},
+ sun:{sym:'TRX-USD',low:0.09,high:0.45,tk:'TRX'},ternus:{sym:'AAPL',low:198,high:288,tk:'AAPL'},
+};
+const fmtP=v=>v>=1000?Math.round(v).toLocaleString('en-US'):(v<1?v.toFixed(4):v.toFixed(2));
+const fmtV=v=>v==null?null:(v>=1e9?(v/1e9).toFixed(1)+'B':v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':''+v);
+function buildLive(slug,q,t){
+  const B=BANDS[slug]; if(!B||q.price==null)return null;
+  const tk=B.tk,P=fmtP(q.price),chg=q.prevClose?(q.price/q.prevClose-1)*100:0,up=chg>=0,sgn=up?'+':'',arr=up?'▲':'▼';
+  let main=tk+' '+P+' '+arr+' '+sgn+chg.toFixed(2)+'%';
+  if(q.w52Low!=null&&q.w52High!=null)main+='   52W '+fmtP(q.w52Low)+'–'+fmtP(q.w52High);
+  const vol=fmtV(q.volume); if(vol)main+='   VOL '+vol; if(q.date)main+='   '+q.date;
+  const ticks=[main]; if(q.dayHigh!=null&&q.dayLow!=null)ticks.push(tk+'  H '+fmtP(q.dayHigh)+'  L '+fmtP(q.dayLow)+'  LAST '+P);
+  const heads=[],nh=q.w52High!=null&&q.price>=q.w52High*0.995,nl=q.w52Low!=null&&q.price<=q.w52Low*1.02;
+  if(nh){heads.push('RECORD CLOSE, AGAIN');heads.push(tk+' PRINTS A NEW HIGH');}
+  else if(chg>=5){heads.push('THE MELT-UP CONTINUES');heads.push(tk+' '+sgn+chg.toFixed(1)+'% · STILL BID');}
+  else if(chg>=1)heads.push('GREEN ON THE SCREEN');
+  else if(chg<=-5){heads.push('THE UNWIND ACCELERATES');heads.push(tk+' '+chg.toFixed(1)+'% · MARGIN MATH');}
+  else if(chg<=-1)heads.push('RED ACROSS THE BOARD'); else heads.push('THE MARKET HOLDS ITS BREATH');
+  if(nl)heads.push('THE PREMIUM IS GONE');
+  if(t>0.62)heads.push('EUPHORIA, PRICED IN'); else if(t<0.20)heads.push('AFTER THE GOLD RUSH');
+  return {ticks,heads:heads.slice(0,3),stamps:[sgn+chg.toFixed(1)+'%','$'+P,arr],chg,price:q.price};
+}
+const regime=t=>t>0.62?['OVERHEATED','up']:t<0.38?['BURNOUT','dn']:['CLEAN','neu'];
+
+const MAS={}, ICACHE={}, TMP={}, LV={}, QQ={};
+const getImg=src=>ICACHE[src]||(ICACHE[src]=new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}));
+function masterFor(slug,i){const m=MAS[slug];if(!m)return null;return m.masters[hashStr('master-'+slug+'-'+i)%(m.mod||m.masters.length)];}
+
+let TOKENS=[];
+const cells={},cvs={},done={},liveOrder=[],visible=new Set(),queue=[];let busy=false;
+function enqueue(k){if(cvs[k]&&!done[k]&&queue.indexOf(k)<0){queue.push(k);pump();}}
+function materialize(k){
+  if(cvs[k])return; const w=TOKENS[k];
+  const cv=document.createElement('canvas');
+  cv.addEventListener('click',()=>window.open('live?s='+w.s+'&i='+w.i,'_blank'));
+  cells[k].querySelector('.ph').appendChild(cv); cvs[k]=cv; liveOrder.push(k); enforceCap(); enqueue(k);
+}
+function dematerialize(k){const cv=cvs[k];if(!cv)return;cv.width=cv.height=0;cv.remove();
+  delete cvs[k];delete done[k];const a=liveOrder.indexOf(k);if(a>=0)liveOrder.splice(a,1);
+  const b=queue.indexOf(k);if(b>=0)queue.splice(b,1);}
+function enforceCap(){for(let j=0;liveOrder.length>MAXLIVE&&j<liveOrder.length;){const k=liveOrder[j];
+  if(visible.has(k)){j++;continue;}dematerialize(k);}}
+function pump(){
+  if(busy||!queue.length)return;busy=true;const k=queue.shift();
+  if(!cvs[k]||done[k]){busy=false;pump();return;}
+  const w=TOKENS[k],src=masterFor(w.s,w.i);
+  getImg(src).then(im=>setTimeout(()=>{
+    const cv=cvs[k];
+    if(cv&&im){
+      ENGINE.init(RW,RH);ENGINE.setSeries((window.SERIES_CFG&&SERIES_CFG[w.s])||null);
+      ENGINE.setTemp(TMP[w.s]!=null?TMP[w.s]:0.5);ENGINE.setLive(LV[w.s]||null);ENGINE.setPress(true);
+      ENGINE.fitMaster(im);cv.width=RW;cv.height=RH;
+      cv.getContext('2d').putImageData(new ImageData(ENGINE.compose(w.i),RW,RH),0,0);done[k]=true;
+    }
+    busy=false;pump();},0));
+}
+function build(){
+  const grid=document.getElementById('grid');
+  TOKENS.forEach((w,k)=>{
+    const cell=document.createElement('div');cell.className='cell';
+    const t=TMP[w.s], price=(LV[w.s]&&LV[w.s].price), rg=regime(t!=null?t:0.5);
+    const ps=price!=null?'$'+fmtP(price):'—';
+    cell.innerHTML='<div class="ph"></div><div class="cap"><span class="tk">'+w.tk
+      +'</span><span class="'+rg[1]+'">'+ps+' · '+rg[0]+'</span></div>';
+    grid.appendChild(cell);cells[k]=cell;
+  });
+  const io=new IntersectionObserver(es=>{for(const e of es){const k=+e.target.dataset.k;
+    if(e.isIntersecting){visible.add(k);materialize(k);}else{visible.delete(k);dematerialize(k);}}},{rootMargin:MARGIN});
+  TOKENS.forEach((w,k)=>{cells[k].dataset.k=k;io.observe(cells[k]);});
+}
+(async()=>{
+  const data=await(await fetch('the200.json')).json();TOKENS=data.works;
+  const slugs=[...new Set(TOKENS.map(w=>w.s))];
+  await Promise.all(slugs.map(async s=>{                              // manifests (masters + pinned mod)
+    try{const m=await(await fetch('assets/'+s+'/manifest.json')).json();
+      MAS[s]={masters:(m.masters||[]).map(f=>'assets/'+s+'/'+f),mod:m.masterMod||0};}catch(e){MAS[s]={masters:[window.MASTER_SRC],mod:0};}
+  }));
+  await Promise.all(slugs.map(async s=>{                              // one live quote per ticker
+    const B=BANDS[s];if(!B)return;
+    try{const q=await(await fetch('/price?ticker='+encodeURIComponent(B.sym))).json();QQ[s]=q;
+      let t=0.5;if(q.price!=null&&B.high>B.low){t=(q.price-B.low)/(B.high-B.low);t=t<0?0:t>1?1:t;}
+      TMP[s]=t;LV[s]=buildLive(s,q,t);}catch(e){TMP[s]=0.5;}
+  }));
+  document.getElementById('sub').textContent='live · '+TOKENS.length+' works · price = temperature of the press';
+  build();
+})();
+</script>
+</body>
+</html>
