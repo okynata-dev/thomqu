@@ -4,7 +4,7 @@
 // temperature from the real price. On any failure price=null -> live page renders clean (t=0.5).
 export async function onRequest({ request }) {
   const url = new URL(request.url);
-  const ticker = (url.searchParams.get('ticker') || 'MSTR').toUpperCase().replace(/[^A-Z0-9.\-]/g, '');
+  const ticker = (url.searchParams.get('ticker') || 'MSTR').toUpperCase().replace(/[^A-Z0-9.^\-]/g, '');
   const cache = caches.default;
   const ckey = new Request('https://thomqu.com/__price/' + ticker);
 
@@ -14,7 +14,7 @@ export async function onRequest({ request }) {
   let price = null, prevClose = null, date = null;
   try {
     const y = await fetch(
-      'https://query1.finance.yahoo.com/v8/finance/chart/' + ticker + '?interval=1d&range=1d',
+      'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(ticker) + '?interval=1d&range=1d',
       { headers: { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)' } });
     const j = await y.json();
     const m = j.chart.result[0].meta;

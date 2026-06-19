@@ -25,15 +25,38 @@
 <script src="series.js?v=9"></script>
 <script>
 "use strict";
-// animation_url renderer: token's press temperature is driven by the LIVE price within the frozen band.
-// t=0.5 (mid) == the frozen mint image; toward ATH the press overheats, toward the low it burns out.
+// animation_url renderer. Two ways to address a work:
+//   ?s=<slug>&id=<edition>   -> drop edition, mapped via manifest.curated  (saylor drop)
+//   ?s=<slug>&i=<engineIdx>  -> direct engine index                       (the 200 self-drop)
+// The press temperature is driven by the figure's LIVE price within its frozen band.
+// t=0.5 (mid band) == the frozen saved image; toward the high it overheats, toward the low it burns out.
+const BANDS={                       // slug -> Yahoo symbol + frozen band + display ticker
+ saylor:{sym:'MSTR',low:104.17,high:457.20,tk:'MSTR'},
+ huang:{sym:'NVDA',low:140.85,high:236.54,tk:'NVDA'},
+ vitalik:{sym:'ETH-USD',low:1388.12,high:4955.90,tk:'ETH'},
+ powell:{sym:'^TNX',low:6.55,high:8.97,tk:'FED'},
+ gates:{sym:'MSFT',low:356.28,high:555.45,tk:'MSFT'},
+ zuck:{sym:'META',low:520.26,high:796.25,tk:'META'},
+ cz:{sym:'BNB-USD',low:380,high:760,tk:'BNB'},
+ trump:{sym:'TRUMP-USD',low:3.5,high:75.0,tk:'TRUMP'},
+ musk:{sym:'DOGE-USD',low:0.07,high:0.48,tk:'DOGE'},
+ sbf:{sym:'FTT-USD',low:0.9,high:55.0,tk:'FTT'},
+ cathie:{sym:'ARKK',low:38,high:88,tk:'ARKK'},
+ buffett:{sym:'BRK-B',low:408,high:558,tk:'BRK'},
+ armstrong:{sym:'COIN',low:140,high:360,tk:'COIN'},
+ dorsey:{sym:'BTC-USD',low:58000,high:112000,tk:'BTC'},
+ dimon:{sym:'JPM',low:200,high:320,tk:'JPM'},
+ dokwon:{sym:'LUNA-USD',low:0.0001,high:119.18,tk:'LUNA'},
+ sun:{sym:'TRX-USD',low:0.09,high:0.45,tk:'TRX'},
+ ternus:{sym:'AAPL',low:198,high:288,tk:'AAPL'},
+};
 const p=new URLSearchParams(location.search);
 const SER=(p.get('s')||'saylor').replace(/[^a-z]/g,'');
-const ID=Math.max(1,parseInt(p.get('id')||'1',10)||1);                 // drop tokenId (1..N)
 const RES=Math.max(700,Math.min(1600,parseInt(p.get('res')||'1000',10)||1000));
+const B=BANDS[SER]||{sym:(SER||'').toUpperCase(),low:0,high:1,tk:SER.toUpperCase()};
 function hashStr(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 
-let MASTERS=[window.MASTER_SRC], ENG_IDX=ID-1, CFG=null, LOW=0, HIGH=1, prevPrice=null, ready=false;
+let MASTERS=[window.MASTER_SRC], ENG_IDX=0, prevPrice=null, ready=false;
 const regime=t=>t>0.62?['OVERHEATED','up']:t<0.38?['BURNOUT','dn']:['CLEAN','neu'];
 
 (async()=>{
@@ -41,37 +64,35 @@ const regime=t=>t>0.62?['OVERHEATED','up']:t<0.38?['BURNOUT','dn']:['CLEAN','neu
   try{man=await(await fetch('assets/'+SER+'/manifest.json')).json();}catch(e){}
   window.__MMOD=(man&&man.masterMod)||0;
   if(man&&man.masters&&man.masters.length)MASTERS=man.masters.map(f=>'assets/'+SER+'/'+f);
-  if(man&&man.curated&&man.curated.length)ENG_IDX=(man.curated[ID-1]||ID)-1;   // tokenId -> engine index
-  CFG=(window.SERIES_CFG&&SERIES_CFG[SER])||null;
-  LOW=(CFG&&CFG.low)||0; HIGH=(CFG&&CFG.high)||1;
+  const iParam=p.get('i'), idParam=p.get('id');
+  if(iParam!=null) ENG_IDX=Math.max(0,parseInt(iParam,10)||0);                  // direct engine index
+  else{const id=Math.max(1,parseInt(idParam||'1',10)||1);                       // edition -> engine index
+    ENG_IDX=(man&&man.curated&&man.curated[id-1] ? man.curated[id-1] : id)-1;}
   const H=RES, W=Math.round(H*0.75);
-  ENGINE.init(W,H); ENGINE.setSeries(CFG); ENGINE.setPress(true);
+  ENGINE.init(W,H); ENGINE.setSeries((window.SERIES_CFG&&SERIES_CFG[SER])||null); ENGINE.setPress(true);
   const src=MASTERS[hashStr('master-'+SER+'-'+ENG_IDX)%(window.__MMOD||MASTERS.length)];
   const img=await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;});
   if(img)ENGINE.fitMaster(img);
-  ready=true;
-  await tick();
-  setInterval(tick, 5*60*1000);                                        // refresh every 5 min
+  ready=true; await tick(); setInterval(tick, 5*60*1000);
 })();
 
 async function tick(){
   if(!ready)return;
-  let price=null,date=null;
-  try{const j=await(await fetch('/price?ticker='+encodeURIComponent(((CFG&&CFG.ticker)||'MSTR').toLowerCase())+'&_='+Date.now())).json();
-    price=j.price;date=j.date;}catch(e){}
+  let price=null;
+  try{const j=await(await fetch('/price?ticker='+encodeURIComponent(B.sym)+'&_='+Date.now())).json();price=j.price;}catch(e){}
   let t=0.5;
-  if(price!=null && HIGH>LOW){t=(price-LOW)/(HIGH-LOW);t=t<0?0:t>1?1:t;}
+  if(price!=null && B.high>B.low){t=(price-B.low)/(B.high-B.low);t=t<0?0:t>1?1:t;}
   ENGINE.setTemp(t);
   const W=ENGINE.W,H=ENGINE.H,work=ENGINE.compose(ENG_IDX);
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;
   cv.getContext('2d').putImageData(new ImageData(work,W,H),0,0);
   const wrap=document.getElementById('wrap');wrap.innerHTML='';wrap.appendChild(cv);
-  const[rg,cls]=regime(t), tk=(CFG&&CFG.ticker)||'MSTR';
+  const[rg,cls]=regime(t);
   const dir=(prevPrice!=null&&price!=null)?(price>=prevPrice?'up':'dn'):cls;
   prevPrice=price;
+  const ps=price!=null?('$'+(price>=1000?price.toLocaleString('en-US',{maximumFractionDigits:0}):price.toFixed(price<1?4:2))):'—';
   document.getElementById('hud').innerHTML=
-    '<b class="'+dir+'">'+(price!=null?'$'+price.toFixed(2):'—')+'</b> '+tk
-    +' &nbsp;·&nbsp; <span class="'+cls+'">'+rg+'</span> &nbsp;·&nbsp; THOMQU #'+ID;
+    '<b class="'+dir+'">'+ps+'</b> '+B.tk+' &nbsp;·&nbsp; <span class="'+cls+'">'+rg+'</span> &nbsp;·&nbsp; THOMQU';
 }
 </script>
 </body>
