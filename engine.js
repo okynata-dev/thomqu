@@ -561,7 +561,12 @@ function pressLayer(i){
     if(rng()<xT*0.8)pageIndex();}
   // LIVE: today's real market facts, screened/databent like the rest. Null on bakes => frozen unchanged.
   if(LIVE){
-    (LIVE.ticks||[]).forEach(t=>{ticker(t);});
+    if(LIVE.ticks&&LIVE.ticks[0]){                          // primary real quote — guaranteed legible strip
+      const fs=8.5*S,rep=(LIVE.ticks[0]+'      ').repeat(6),yy=(rng()<0.5?(0.045+rng()*0.03):(0.93+rng()*0.03))*H;
+      x.save();x.font='700 '+fs+'px ui-monospace,Menlo,Consolas,monospace';x.fillStyle=INK(0.92);
+      x.fillText(rep,-rng()*W*0.5,yy);x.restore();drawn++;
+    }
+    (LIVE.ticks||[]).slice(1).forEach(t=>{ticker(t);});
     (LIVE.heads||[]).forEach(h=>{headline(h);});
     (LIVE.stamps||[]).forEach(s=>{stamp(s);});
   }
