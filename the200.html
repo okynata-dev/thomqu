@@ -113,7 +113,7 @@ function build(){
   TOKENS.forEach((w,k)=>{cells[k].dataset.k=k;io.observe(cells[k]);});
 }
 (async()=>{
-  const data=await(await fetch('the200.json')).json();TOKENS=data.works;
+  const data=await(await fetch('the200.json?_='+Date.now())).json();TOKENS=data.works;   // always current list
   const slugs=[...new Set(TOKENS.map(w=>w.s))];
   await Promise.all(slugs.map(async s=>{                              // manifests (masters + pinned mod)
     try{const m=await(await fetch('assets/'+s+'/manifest.json')).json();
