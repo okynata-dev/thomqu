@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #49 — POWELL / FED",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/49.png",
+ "animation_url": "https://thomqu.com/live?s=powell&i=19",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Jerome Powell"
+  },
+  {
+   "trait_type": "Series",
+   "value": "POWELL / FED"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "FED"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Red/Black"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 1
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 49,
+   "max_value": 200
+  }
+ ]
+}

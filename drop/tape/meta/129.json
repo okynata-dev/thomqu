@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #129 — BUFFETT / BRK",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/129.png",
+ "animation_url": "https://thomqu.com/live?s=buffett&i=459",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Warren Buffett"
+  },
+  {
+   "trait_type": "Series",
+   "value": "BUFFETT / BRK"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "BRK"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Ash"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 3
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 129,
+   "max_value": 200
+  }
+ ]
+}

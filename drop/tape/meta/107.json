@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #107 — HUANG / NVDA",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/107.png",
+ "animation_url": "https://thomqu.com/live?s=huang&i=410",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Jensen Huang"
+  },
+  {
+   "trait_type": "Series",
+   "value": "HUANG / NVDA"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "NVDA"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Teal"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 4
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 107,
+   "max_value": 200
+  }
+ ]
+}

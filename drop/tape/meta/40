@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #40 — ARMSTRONG / COIN",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/40.png",
+ "animation_url": "https://thomqu.com/live?s=armstrong&i=220",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Brian Armstrong"
+  },
+  {
+   "trait_type": "Series",
+   "value": "ARMSTRONG / COIN"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "COIN"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Red/Black"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 2
+  },
+  {
+   "trait_type": "Databend",
+   "value": "No"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 40,
+   "max_value": 200
+  }
+ ]
+}

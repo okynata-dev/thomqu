@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #130 — GATES / MSFT",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/130.png",
+ "animation_url": "https://thomqu.com/live?s=gates&i=484",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Bill Gates"
+  },
+  {
+   "trait_type": "Series",
+   "value": "GATES / MSFT"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "MSFT"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Ash"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 2
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 130,
+   "max_value": 200
+  }
+ ]
+}

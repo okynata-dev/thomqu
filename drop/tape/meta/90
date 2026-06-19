@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #90 — BUTERIN / ETH",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/90.png",
+ "animation_url": "https://thomqu.com/live?s=vitalik&i=175",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Vitalik Buterin"
+  },
+  {
+   "trait_type": "Series",
+   "value": "BUTERIN / ETH"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "ETH"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Teal"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 4
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 90,
+   "max_value": 200
+  }
+ ]
+}

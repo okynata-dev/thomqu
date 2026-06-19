@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #63 — ZUCK / META",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/63.png",
+ "animation_url": "https://thomqu.com/live?s=zuck&i=429",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Mark Zuckerberg"
+  },
+  {
+   "trait_type": "Series",
+   "value": "ZUCK / META"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "META"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Misprint"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 2
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 63,
+   "max_value": 200
+  }
+ ]
+}

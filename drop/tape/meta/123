@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #123 — DIMON / JPM",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/123.png",
+ "animation_url": "https://thomqu.com/live?s=dimon&i=270",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Jamie Dimon"
+  },
+  {
+   "trait_type": "Series",
+   "value": "DIMON / JPM"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "JPM"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Warhol Screenprint"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 1
+  },
+  {
+   "trait_type": "Databend",
+   "value": "No"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 123,
+   "max_value": 200
+  }
+ ]
+}

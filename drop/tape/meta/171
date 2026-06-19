@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #171 — MUSK / DOGE",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/171.png",
+ "animation_url": "https://thomqu.com/live?s=musk&i=305",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Elon Musk"
+  },
+  {
+   "trait_type": "Series",
+   "value": "MUSK / DOGE"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "DOGE"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Teal"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 2
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 171,
+   "max_value": 200
+  }
+ ]
+}

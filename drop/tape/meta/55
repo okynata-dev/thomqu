@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #55 — CZ / BNB",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/55.png",
+ "animation_url": "https://thomqu.com/live?s=cz&i=328",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Changpeng Zhao"
+  },
+  {
+   "trait_type": "Series",
+   "value": "CZ / BNB"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "BNB"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Navy"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 1
+  },
+  {
+   "trait_type": "Databend",
+   "value": "No"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 55,
+   "max_value": 200
+  }
+ ]
+}

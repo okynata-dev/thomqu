@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #13 — SAYLOR / MSTR",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/13.png",
+ "animation_url": "https://thomqu.com/live?s=saylor&i=198",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Michael Saylor"
+  },
+  {
+   "trait_type": "Series",
+   "value": "SAYLOR / MSTR"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "MSTR"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Poster Ash"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 1
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 13,
+   "max_value": 200
+  }
+ ]
+}

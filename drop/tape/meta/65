@@ -1,0 +1,38 @@
+{
+ "name": "TAPE #65 — WOOD / ARKK",
+ "description": "TAPE — a silkscreen press wired to a ticker. The image is frozen; the live version (animation_url) re-prints itself daily from the figure's real market price: euphoria at the top of the band, burnout at the bottom. thomqu.com",
+ "image": "https://thomqu.com/drop/tape/img/65.png",
+ "animation_url": "https://thomqu.com/live?s=cathie&i=30",
+ "attributes": [
+  {
+   "trait_type": "Figure",
+   "value": "Cathie Wood"
+  },
+  {
+   "trait_type": "Series",
+   "value": "WOOD / ARKK"
+  },
+  {
+   "trait_type": "Ticker",
+   "value": "ARKK"
+  },
+  {
+   "trait_type": "Finish",
+   "value": "Warhol Screenprint"
+  },
+  {
+   "trait_type": "Overprints",
+   "value": 1
+  },
+  {
+   "trait_type": "Databend",
+   "value": "Yes"
+  },
+  {
+   "display_type": "number",
+   "trait_type": "No.",
+   "value": 65,
+   "max_value": 200
+  }
+ ]
+}
